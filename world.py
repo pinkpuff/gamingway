@@ -52,29 +52,61 @@ class TileMap:
   # using run-length encoding.
   result = []
   tiles = [tile for row in self.tiles for tile in row]
-  # tiles = self.tiles
+
+  # Then we iterate through the new 1D array, if there is any data to even look at.
   if len(self.tiles) > 0:
-   offset = 0
    runlength = 1
+
+   # Examine each tile and either add it as a single tile if it doesn't match the
+   # previous tile, or increment the run length if it does.
    for index, tile in enumerate(tiles):
+
+    # If we're at the beginning of the list, we initialize the tile we're tracking
+    # to be the current tile, and reset the runlength to 1.
     if index == 0:
      oldtile = tile
      runlength = 1
+
+    # Otherwise, we handle it normally.
     else:
+     
+     # If the current tile matches the one we're already tracking, simply increase
+     # the runlength.
      if tile == oldtile:
       runlength += 1
+     
+     # Otherwise, we write the tile we were tracking and start tracking the new one.
      else:
+      
+      # A single run can only be at most 0x100 tiles. If it needs to be longer than
+      # that, we need to create multiple runs.
       while runlength >= 0x100:
        result.append(oldtile + 0x80)
        result.append(0xFF)
        runlength -= 0xFF
+
+      # Now that we know the runlength is less than 0x100, we check whether it's a
+      # single tile or a run. If it's a run, we need to set the high bit and 
+      # include the runlength as the following byte (-1 since the runlength byte
+      # only represents the number of "additional" repeats of the tile).
       if runlength > 1:
        result.append(oldtile + 0x80)
        result.append(runlength - 1)
+
+      # Otherwise, it's a single tile. We still need to check whether it's 1 since
+      # the above while loop could theoretically have reduced it to 0, in which case
+      # we don't need to write anything further.
+      # Since it's a single tile, all we need to do is write the tile index and
+      # leave the high bit unset.
       elif runlength == 1:
        result.append(oldtile)
+      
+      # Finally, we reset the runlength to 1 and begin tracking the current tile.
       runlength = 1
       oldtile = tile
+
+   # Once we've exhausted the full array of tiles, we might have a tile or run of
+   # tiles left to write. Therefore, we need to process them the same way as above.
    while runlength >= 0x100:
     result.append(oldtile + 0x80)
     result.append(0xFF)
@@ -84,6 +116,8 @@ class TileMap:
     result.append(runlength - 1)
    elif runlength == 1:
     result.append(oldtile)
+
+  # And finally, return the constructed RLE encoded array of bytes.
   return result
 
 class Map:
