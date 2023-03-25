@@ -73,6 +73,7 @@ When you are ready to commit the bytecode of the rom variable to a file on the f
 Thus, an example of a program that changes the name of the Nuke spell to Flare might look something like this:
 ```
 from gamingway import FF4Rom
+
 rom = FF4Rom("~/Games/Snes/ff2us.smc")
 rom.read()
 rom.NUKE_SPELL.name = "[BLK]Flare"
