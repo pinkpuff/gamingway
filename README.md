@@ -79,6 +79,6 @@ rom.NUKE_SPELL.name = "[BLK]Flare"
 rom.write()
 rom.save("~/Games/Snes/Hacks/ff2-renamed-nuke.smc")
 ```
-The rom contains a bunch of default constants referring to individual objects from vanilla to facilitate this type of thing.
+If you're wondering about how it knows what NUKE_SPELL is, the rom contains a bunch of default constants referring to individual objects from vanilla to facilitate exactly this type of editing.
 That way the programmer doesn't have to know or care that "Nuke" is spell number 48 or whatever.
 Likewise, the string parser has certain three letter codes built in that represent symbols from the FF4 font that aren't in standard ASCII, such as [BLK] which represents the black magic orb.
