@@ -69,3 +69,16 @@ Note that this does not update the file on the disk; it only updates the bytecod
 When you are ready to commit the bytecode of the rom variable to a file on the filesystem, you can use:
 
 ``rom.save("example/path/to/new/rom/ff4.smc")``
+
+Thus, an example of a program that changes the name of the Nuke spell to Flare might look something like this:
+```
+from gamingway import FF4Rom
+rom = FF4Rom("~/Games/Snes/ff2us.smc")
+rom.read()
+# The rom contains a bunch of default constants referring to individual objects from vanilla to facilitate this type of thing.
+# That way the programmer doesn't have to know or care that "Nuke" is spell number 48 or whatever.
+# Likewise, the string parser has certain three letter codes built in that represent symbols from the FF4 font that aren't in standard ASCII, such as [BLK] which represents the black magic orb.
+rom.NUKE_SPELL.name = "[BLK]Flare"
+rom.write()
+rom.save("~/Games/Snes/Hacks/ff2-renamed-nuke.smc")
+```
