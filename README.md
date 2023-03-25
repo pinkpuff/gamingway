@@ -14,18 +14,27 @@ I will work on improving/fixing this as demand arises. For now though, I think I
 
 ## Usage
 Put this line at the top of your .py file that you want to use it in:
+
 ``from gamingway import FF4Rom``
 
 Then to load a rom from within the code, use:
+
 ``rom = FF4Rom("example/path/to/rom/ff4.smc")``
+
 Replace ``rom`` in the above with the name of the variable you would like to use to represent the abstract FF4Rom object. Also replace the path in quotation marks with the filesystem path to the rom file you wish to load the information from. You can have multiple roms stored in multiple FF4Rom variables and work with them as needed.
 
 The above merely sets up an association between the variable and the rom file on the filesystem. To actually parse the data from the file into abstract objects that can be manipulated with the gamingway library's functions, use the following:
+
 ``rom.read()``
+
 Again, replace ``rom`` with the variable name from the previous step. You can also tell it to read only one specific or general type of data. For example:
+
 ``rom.read("spells")``
+
 That will only parse spell data. You can likewise say something like:
+
 ``rom.read("magic")``
+
 This will read all data related to magic, which of course includes spells, but would also include things like the characters' spellbooks. If you want to read multiple types of data without reading all types, you can simply call ``read`` multiple times, each with the different types of data you want to read.
 
 The full list of currently implemented data types is as follows:
@@ -51,9 +60,12 @@ The reason everything is separated out like this is because I want to make as fe
 From here, you can make whatever changes you want to the rom by manipulating the variables and objects directly. Hopefully the source code is or will be well documented enough that it should be easy to figure out how to achieve whatever your goal is. Before trying to edit a certain type of data make sure you have read/parsed it as outlined above.
 
 After making the desired changes, you can write them back to the rom using:
+
 ``rom.write()``
+
 As with the ``read`` function, you can pass a parameter to ``write`` to only write a specific type of data (it uses the same names as listed above).
 Note that this does not update the file on the disk; it only updates the bytecode stored in the rom variable.
 
 When you are ready to commit the bytecode of the rom variable to a file on the filesystem, you can use:
+
 ``rom.save("example/path/to/new/rom/ff4.smc")``
