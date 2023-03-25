@@ -8,7 +8,7 @@ The objective of this project is twofold:
 2. **Provide documentation for where and how data is stored in the rom.** There is a lot of known information about this already, but I figure by having the documentation all in one place and alongside the code, it may make it both easier to find and easier to understand. As a result, my plan is to include very thorough and detailed comments explaining every step of every procedure.
 
 ## Installation
-It's not currently in a state where you can simply pip install it like a regular python library but I do plan to implement that down the road.
+It's not currently in a state where you can just pip install it like a regular python library but I do plan to implement that down the road.
 For now, simply download the files into the folder for whatever project you intend to use it in and import it.
 I will work on improving/fixing this as demand arises. For now though, I think I'm the only one using it ^_^;
 
