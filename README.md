@@ -75,10 +75,10 @@ Thus, an example of a program that changes the name of the Nuke spell to Flare m
 from gamingway import FF4Rom
 rom = FF4Rom("~/Games/Snes/ff2us.smc")
 rom.read()
-# The rom contains a bunch of default constants referring to individual objects from vanilla to facilitate this type of thing.
-# That way the programmer doesn't have to know or care that "Nuke" is spell number 48 or whatever.
-# Likewise, the string parser has certain three letter codes built in that represent symbols from the FF4 font that aren't in standard ASCII, such as [BLK] which represents the black magic orb.
 rom.NUKE_SPELL.name = "[BLK]Flare"
 rom.write()
 rom.save("~/Games/Snes/Hacks/ff2-renamed-nuke.smc")
 ```
+The rom contains a bunch of default constants referring to individual objects from vanilla to facilitate this type of thing.
+That way the programmer doesn't have to know or care that "Nuke" is spell number 48 or whatever.
+Likewise, the string parser has certain three letter codes built in that represent symbols from the FF4 font that aren't in standard ASCII, such as [BLK] which represents the black magic orb.
