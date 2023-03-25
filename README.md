@@ -63,7 +63,7 @@ After making the desired changes, you can write them back to the rom using:
 
 ``rom.write()``
 
-As with the ``read`` function, you can pass a parameter to ``write`` to only write a specific type of data (it uses the same names as listed above).
+As with the ``read`` function, you can pass a parameter to the ``write`` function to have it only write a specific type of data (it uses the same names as listed above).
 Note that this does not update the file on the disk; it only updates the bytecode stored in the rom variable.
 
 When you are ready to commit the bytecode of the rom variable to a file on the filesystem, you can use:
