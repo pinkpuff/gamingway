@@ -23,7 +23,7 @@ Then to load a rom from within the code, use:
 
 Replace ``rom`` in the above with the name of the variable you would like to use to represent the abstract FF4Rom object. Also replace the path in quotation marks with the filesystem path to the rom file you wish to load the information from. You can have multiple roms stored in multiple FF4Rom variables and work with them as needed.
 
-The above merely sets up an association between the variable and the rom file on the filesystem. To actually parse the data from the file into abstract objects that can be manipulated with the gamingway library's functions, use the following:
+The above merely sets up an association between the variable and the rom file on the filesystem and reads the raw bytecode from it. To actually parse the data from the file into abstract objects that can be manipulated with the gamingway library's functions, use the following:
 
 ``rom.read()``
 
