@@ -1,3 +1,7 @@
+# This represents a spell that can be cast in battle.
+# The same object will likely be used for "monster abilities" like ColdMist and
+# Reaction and such but for now, only the 6-letter-name player spells are being
+# read.
 class Spell:
  
  def __init__(self):
