@@ -4,7 +4,7 @@ I figure if Namingway changes your name, then Gamingway changes your game :D
 
 ## Purpose
 The objective of this project is twofold:
-1. **Provide a tool for rom hacking whose power extends beyond that of a simple GUI editor.** As a python library, while it is still capable of all the more "simple" tasks like changing a weapon's graphic or a spell's name or something, it is capable of much more complex tasks, such as performing operations on an entire set of data, copying or modifying data between multiple roms, or even creating a full randomizer. It also has built in safeguards that allow it to read most expanded and hacked roms.
+1. **Provide a tool for rom hacking whose power extends beyond that of a simple GUI editor.** As a python library, while it is still capable of all the more "simple" tasks like changing a weapon's graphic or a spell's name or something, it is capable of much more complex tasks. For example, you could use it to create a program that performs operations on an entire set of data, copies or modifies data between multiple roms, or you could even use it to create a full randomizer. It also has built in safeguards that allow it to read most expanded and hacked roms.
 2. **Provide documentation for where and how data is stored in the rom.** There is a lot of known information about this already, but I figure by having the documentation all in one place and alongside the code, it may make it both easier to find and easier to understand. As a result, my plan is to include very thorough and detailed comments explaining every step of every procedure.
 
 ## Installation
