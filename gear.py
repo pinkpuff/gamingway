@@ -1,6 +1,10 @@
 import common
 import magic
 
+# An EquipTable is essentially a list of flags indicating which jobs have permission
+# to use a certain piece of equipment. Since many equipments share the same set of
+# jobs that can equip them, this saves space relative to giving each equipment its 
+# own individual full set of flags.
 class EquipTable(common.FlagSet):
 
  def __init__(self):
