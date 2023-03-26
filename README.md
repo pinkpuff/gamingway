@@ -37,7 +37,7 @@ That will only parse spell data. You can likewise say something like:
 
 This will read all data related to magic, which of course includes spells, but would also include things like the characters' spellbooks. If you want to read multiple types of data without reading all types, you can simply call ``read`` multiple times, each with the different types of data you want to read.
 
-The full list of currently implemented data types is as follows:
+The full list of currently implemented data types is as follows (this will expand as more types of data are implemented):
 * ``all`` Reads everything; this is the default if you leave out the parameter.
   * ``magic``
     * ``spells`` Player spells castable in battle. Currently only reads the 6-letter-name ones and does not include "monster abilities" like ColdMist and Reaction and so on.
