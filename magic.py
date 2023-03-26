@@ -76,14 +76,18 @@ class Spell:
   # tries to display the MP cost, since it only expects a two digit number.
   self.mp = 0
   
-  
+  # This flag indicates whether or not the spell is bounced by reflect.
   self.reflectable = False
+
+  # These are the spell's animation data. They indicate which animation it uses and
+  # what colors and what sound effect.
   self.palette = 0
   self.sprites = 0
   self.visual1 = 0
   self.visual2 = 0
   self.sound = 0
  
+ # Read the main spell data from the rom at the given address.
  def read(self, rom, address):
   self.delay = rom.data[address] % 0x20
   self.target = rom.data[address] >> 5
@@ -97,6 +101,7 @@ class Spell:
   self.mp = rom.data[address + 5] % 0x80
   self.reflectable = not rom.flag(address + 5, 7)
  
+ # Write the main spell data back to the rom at the given address.
  def write(self, rom, address):
   rom.data[address] = self.delay + (self.target << 5)
   rom.data[address + 1] = self.power
@@ -109,33 +114,56 @@ class Spell:
   rom.data[address + 5] = self.mp % 0x80
   rom.setbit(address + 5, 7, not self.reflectable)
  
+ # Read the spell name from the given address.
+ # The spell names are stored separately from the rest of the spell data, so we use
+ # a separate reading function so that we don't get confused passing a bunch of
+ # different addresses to one function.
  def read_name(self, rom, address, text):
+
+  # We simply pass the raw byte sequence to the text converter.
   bytelist = rom.data[address:address + rom.SPELL_NAME_WIDTH]
+
+  # The name is cropped on the right to facilitate printing and constructing
+  # strings, but it will be padded back out when it gets written back to the rom.
   self.name = text.asciitext(text.from_bytes(bytelist)).rstrip()
  
+ # Write the spell name back to the rom.
  def write_name(self, rom, address, text):
+
+  # Pad the name back out to the appropriate width first.
   newname = text.ff4text(self.name)
   newname = newname.ljust(rom.SPELL_NAME_WIDTH, text.ff4text(" "))
+
+  # Then convert it and put it back into the rom.
   rom.inject(address, text.to_bytes(newname))
 
+ # Read the spell visual effect information from the rom.
+ # As with the names, these are stored in a separate place in the rom, so we use a
+ # separate function to read them in order to reduce confusion.
  def read_visuals(self, rom, address):
   self.palette = rom.data[address]
   self.sprites = rom.data[address + 1]
   self.visual1 = rom.data[address + 2]
   self.visual2 = rom.data[address + 3]
   
+ # Write the spell visual effect information back to the rom.
  def write_visuals(self, rom, address):
   rom.data[address] = self.palette
   rom.data[address + 1] = self.sprites
   rom.data[address + 2] = self.visual1
   rom.data[address + 3] = self.visual2
  
+ # Read the spell's sound effect from the rom.
+ # As with the visual data and names, the sound effects are stored separately, so we
+ # use a separate function to read them.
  def read_sound(self, rom, address):
   self.sound = rom.data[address]
  
+ # Write the spell's sound effect back to the rom.
  def write_sound(self, rom, address):
   rom.data[address] = self.sound
  
+ # Returns a string containing the spell's visual effect information.
  def display_visuals(self, main):
   result  = "Palette: {}, ".format(main.text.hex(self.palette))
   result += "Sprites: {}, ".format(main.text.hex(self.sprites))
@@ -144,6 +172,7 @@ class Spell:
   result += "Sound:   {}".format(main.text.hex(self.sound))
   return result
  
+ # Returns a string containing the main information about the spell.
  def display(self, main):
   result  = "Name: {}\n".format(self.name)
   result += "MP:     {}\n".format(self.mp)
@@ -179,23 +208,62 @@ class Spell:
    result += "\n" + properties
   return result
 
+# A Spellbook is the list of spells someone either knows currently or will learn at
+# future levels. Spellbooks are linked to Jobs, not characters. That's why, for
+# example, Rydia can have a White spellbook as a child but not as an adult.
+# Each character can have up to one White spellbook, up to one Black spellbook, and
+# up to one Call (summon) spellbook. I think Ninja counts as a Black spellbook but
+# has some kind of special hardcoding that replaces the word Black in the menu with
+# the word Ninja.
 class Spellbook:
 
  def __init__(self, spell_reference = []):
+
+  # This represents the list of spells the job will learn and the levels at which
+  # they will learn them. Spells that the spellbook begins populated with already
+  # are represented by giving them a "learned level" of 0.
   self.spells = {}
   self.spell_reference = spell_reference
  
+ # This reads the list of spells that the spellbook begins already populated with.
+ # These are stored separately in the rom from the spells that are learned at
+ # later levels, so they have separate reading functions.
  def read_starting_spells(self, rom, address):
+
+  # Each entry in the spellbook indicates an association between a level number and
+  # a LIST of spell indexes, not just a single spell. This is because sometimes a
+  # job can learn multiple spells at the same level. 
   self.spells[0] = []
+
+  # This is for calculating the number of bytes we read while reading this
+  # spellbooks's starting spells. This is important where it's a variable-length
+  # list and the general function that reads all the spellbooks needs to know
+  # where it left off, as there's no pointer table.
   offset = 0
+
+  # Each list of starting spells is terminated in one of two ways:
+  #  * It reads an FF byte; or
+  #  * It has 24 entries.
+  # So if you read a full spellbook worth of spells (24), the list is considered
+  # done without having a FF separator. If the spellbook contains fewer starting 
+  # spells than that, it will end in an FF byte to signal the end of the list.
   for index in range(24):
    offset += 1
+
+   # If we read a FF byte, we know the list is terminated, so we can exit without
+   # trying to add a spell to the list.
    if rom.data[address + index] == 0xFF:
     break
+
+   # Otherwise it's a spell, so we add it to the list associated with "level 0".
    spell = rom.data[address + index]
    self.spells[0].append(spell)
+
+  # Finally we return the modified address to signal to the outer function where we
+  # left off reading.
   return address + offset
  
+ # Write the starting spells back to the rom.
  def write_starting_spells(self, rom, address):
   offset = 0
   
@@ -205,9 +273,8 @@ class Spellbook:
     rom.data[address + offset] = spell
     offset += 1
   
-  # Then, regardless of whether we wrote any spells or not, we need a
-  # terminating FF byte. The only situation we don't need a terminator
-  # is if we wrote 24 spells.
+  # Then, even if we didn't write any spells, we need a terminating FF byte. The 
+  # only situation we don't need a terminator is if we wrote a full 24 spells.
   if offset < 24:
    rom.data[address + offset] = 0xFF
    offset += 1
