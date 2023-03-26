@@ -95,6 +95,13 @@ class Configuration:
    "Fiancee"
   ]
 
+  self.equip_slots = [
+   "Hand", 
+   "Head", 
+   "Body", 
+   "Arms"
+  ]
+  
   self.target_types = [
    "Self",
    "Single (ally)",

@@ -164,20 +164,40 @@ class Equipment(Item):
   # each equipment does not get its own independent set of flags, but rather
   # references an index into a list of equip tables.
   self.equips = 0
- 
+
+# This represents an item that can be equipped onto a character to boost their
+# defensive stats. 
 class Armor(Equipment):
 
  def __init__(self):
   super().__init__()
-  self.slots = ["Hand", "Head", "Body", "Arms"]
+  
+  # The bonus the armor gives to physical defense.
   self.defense = 0
+  
+  # The bonus the armor gives to physical evade.
   self.evade = 0
+  
+  # The bonus the armor gives to magic defense.
   self.magic_defense = 0
+  
+  # The bonus the armor gives to magic evade.
   self.magic_evade = 0
+  
+  # I have no idea what this flag means, or if it's even used.
   self.mystery_flag = False
+  
+  # This flag seems to be set on shields; not sure whether it has any actual
+  # in-game effect or not.
   self.shield = False
-  self.slot = "Hand"
+  
+  # This matches up with the equip slot the item belongs in, but I seem to recall
+  # that the way the game decides which item belongs in which slot is based on its
+  # index in the item list and that this value is ignored. Thus, I suspect that
+  # simply changing this value will not have the effect you might expect.
+  self.slot = 0
  
+ # Read the armor data from the rom.
  def read(self, rom, address):
   self.magic_evade = rom.data[address] % 0x80
   self.magnetic = rom.flag(address, 7)
@@ -189,9 +209,10 @@ class Armor(Equipment):
   self.shield = rom.flag(address + 4, 7)
   self.races.read(rom, address + 5)
   self.equips = rom.data[address + 6] % 0x20
-  self.slot = self.slots[rom.data[address + 6] >> 6]
+  self.slot = rom.data[address + 6] >> 6
   self.statbuff.read(rom, address + 7)
  
+ # Write the armor data back to the rom.
  def write(self, rom, address):
   rom.data[address] = self.magic_evade
   rom.setbit(address, 7, self.magnetic)
@@ -205,6 +226,7 @@ class Armor(Equipment):
   rom.data[address + 6] = (self.slots.index(self.slot) << 6) + self.equips
   self.statbuff.write(rom, address + 7)
  
+ # Return a string containing all the armor's information.
  def display(self, main):
   result = ""
   result += "Name: {}\n".format(self.name)
@@ -214,7 +236,7 @@ class Armor(Equipment):
   result += "M.Evade:  {}\n".format(self.magic_evade)
   result += "Mystery:  {}\n".format(self.mystery_flag)
   result += "Shield:   {}\n".format(self.shield)
-  result += "Slot:     {}\n".format(self.slot)
+  result += "Slot:     {}\n".format(main.config.equip_slots[self.slot])
   result += "Magnetic: {}\n".format(self.magnetic)
   result += "Resists:  [{}] ".format(main.text.hex(self.attributes))
   if len(main.attributes) > 0:
@@ -226,6 +248,8 @@ class Armor(Equipment):
    result += main.equips[self.equips].display(main)
   return result
 
+# This represents an item that can be equipped onto a character to boost their
+# attack stats. 
 class Weapon(Equipment):
 
  def __init__(self):
@@ -244,12 +268,12 @@ class Weapon(Equipment):
   self.mystery_flag2 = False
   self.consumable = False
   self.throwable2 = False
-  self.casts_visual = 0 # Seems like these aren't being read yet?
-  self.casts_power = 0  # ^^^
   self.sprite = 0
   self.palette = 0
   self.swing = 0
   self.slash = 0
+  self.casts_visual = 0 # Seems like these aren't being read yet?
+  self.casts_power = 0  # ^^^
 
  def read(self, rom, address):
   self.magnetic = rom.flag(address, 7)
