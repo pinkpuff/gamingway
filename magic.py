@@ -69,7 +69,14 @@ class Spell:
   # This flag indicates whether or not a player unit hit with the spell will show
   # the "impact" animation (the one that looks like they're getting hit).
   self.impact = False
+  
+  # This is the MP cost of the spell. The byte that encodes this uses the high bit
+  # for something else so it physically can't be any higher than 128, but I think
+  # putting it higher than 99 might cause some strange behaviour when the game
+  # tries to display the MP cost, since it only expects a two digit number.
   self.mp = 0
+  
+  
   self.reflectable = False
   self.palette = 0
   self.sprites = 0
