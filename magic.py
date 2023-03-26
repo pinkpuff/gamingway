@@ -223,6 +223,14 @@ class Spellbook:
   # they will learn them. Spells that the spellbook begins populated with already
   # are represented by giving them a "learned level" of 0.
   self.spells = {}
+
+  # This is a reference to the rom's spell list. This is required in order for
+  # the functions that manipulate the spellbook to be able to pass references to
+  # actual spells as opposed to just indexes. For example, it would be a lot more
+  # convenient and intuitive to be able to type something like:
+  #  ff4.RYDIA_WHITE.teach_spell(25, ff4.HEAL_SPELL)
+  # as opposed to something like:
+  #  ff4.RYDIA_WHITE.teach_spell(25, 18)
   self.spell_reference = spell_reference
  
  # This reads the list of spells that the spellbook begins already populated with.
@@ -265,6 +273,10 @@ class Spellbook:
  
  # Write the starting spells back to the rom.
  def write_starting_spells(self, rom, address):
+
+  # This is for tracking where we left off writing data. Since the learned spells
+  # are variable-length lists, we need to report this to the parent function so it
+  # knows where to pick up with writing the next list.
   offset = 0
   
   # If there are any spells to write, write them.
@@ -282,9 +294,21 @@ class Spellbook:
   # And make sure we report where we left off.
   return address + offset
  
+ # This reads the spells learned at future levels from the rom.
+ # These are stored separately in the rom from the spells that it starts with, so
+ # they have separate reading functions.
  def read_spell_progression(self, rom, address):
+
+  # We start by populating the dictionary encoding the spellbook with an empty list
+  # at each level up to 99.
   for index in range(99):
    self.spells[index + 1] = []
+
+  # Each entry in the list of learned spells consists of two bytes: a level, and a
+  # spell index. The list is terminated when we read a FF byte for the level.
+  # Therefore, first we read a level, then if it's not FF, we enter the loop where
+  # we read a spell, add that level/spell pair to the list, and then read another
+  # level byte, and so on.
   level = rom.data[address]
   offset = 1
   while level != 0xFF:
@@ -293,8 +317,11 @@ class Spellbook:
    self.spells[level].append(spell)
    level = rom.data[address + offset]
    offset += 1
+
+  # And report where we left off.
   return address + offset
 
+ # Write the spells learned at future levels back to the rom.
  def write_spell_progression(self, rom, address):
   offset = 0
   for level, page in self.spells.items():
@@ -326,21 +353,21 @@ class Spellbook:
    result = result[0:len(result) - 1]
   return result
 
+ # Clears all spells learned at the specified level.
+ # If the level is 0, it clears all starting spells.
+ # If no level is specified, it clears the entire spellbook, including
+ # all starting spells.
  def clear(self, level = None):
-  # Clears all spells learned at the specified level.
-  # If the level is 0, it clears all starting spells.
-  # If no level is specified, it clears the entire spellbook, including
-  # all starting spells.
   if level == None:
    for index in range(100):
     self.spells[index] = []
   else:
    self.spells[level] = []
 
+ # Teaches the specified spell at the specified level.
+ # If the level is 0, the spell is added to the starting spells.
+ # This function only works if the spell_reference has been set.
  def teach_spell(self, level, spell):
-  # Teaches the specified spell at the specified level.
-  # If the level is 0, the spell is added to the starting spells.
-  # This function only works if the spell_reference has been set.
   if type(spell) != int:
    spell = self.spell_reference.index(spell)
   if not spell in self.spells[level]:
