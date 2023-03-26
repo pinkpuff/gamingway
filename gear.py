@@ -38,7 +38,9 @@ class EquipTable(common.FlagSet):
 
 # An Item is anything that can appear in the player's inventory.
 # There are several Item subtypes based on what properties they have in the rom:
-#  * Tool      = Something that can't be equipped or used in battle. 
+#  * Tool      = Something that can't be equipped or used in battle. It has no
+#                corresponding class because it doesn't have any information or
+#                functionality beyond that of the parent Item class.
 #  * Supply    = Something that can't be equipped but can be used in battle.
 #  * Equipment = Something that can be equipped onto characters.
 # Equipment has two further subtypes:
@@ -105,36 +107,62 @@ class Item:
  def display(self, main):
   return "Name: {}".format(self.name)
 
+# This is a consumable item that can be used in battle.
 class Supply(Item):
 
  def __init__(self, attribute_reference = []):
   super().__init__()
+
+  # The "utility" essentially defines what the supply does when used in battle.
+  # Since all the information is encoded in exactly the same way and same order as
+  # it is in the spells, we simply use the spell object to encode it.
   self.utility = magic.Spell()
   
+ # Read the item's utility from the rom.
  def read(self, rom, address):
   self.utility.read(rom, address)
- 
+
+ # Write the item's utility back to the rom. 
  def write(self, rom, address):
   self.utility.write(rom, address)
  
- # def read_name(self, rom, address):
-  # super().read_name(rom, address)
- 
- # def write_name(self, rom, address):
-  # super().write_name(rom, address)
- 
+ # Return a string that contains the supply's information.
  def display(self, main):
   self.utility.name = self.name
   return self.utility.display(main)
 
+# This represents an item that can be equipped onto characters. It acts as the
+# parent class for both Weapons and Armors, and encodes all the information that is
+# common to both.
 class Equipment(Item):
 
  def __init__(self):
   super().__init__()
+
+  # If a character is wearing any equipment at all that has this flag set, and you
+  # are on a map that also has its "magnetic" flag set, the character will have the
+  # "Magnetized" status in all battles spawned by that map.
   self.magnetic = False
+
+  # Attributes refer to the element and status flags. For weapons, this indicates
+  # what properties your physical attacks will have; for armors, it indicates what
+  # elements and statuses you resist.
+  # Rather than each equipment having its own independent set of flags, it instead
+  # has an index into a global list of attribute tables that indicates which of
+  # those tables it uses.
   self.attributes = 0
+
+  # For weapons, this indicates the monster races your attacks will deal more damage
+  # to. For armors, it indicates the monster races that will deal less damage to you
+  # with their physical attacks.
   self.races = common.FlagSet()
+
+  # This indicates what stats the equipment boosts and by how much.
   self.statbuff = common.StatBuff()
+
+  # This indicates which jobs can use the equipment. Note that much like attributes,
+  # each equipment does not get its own independent set of flags, but rather
+  # references an index into a list of equip tables.
   self.equips = 0
  
 class Armor(Equipment):
