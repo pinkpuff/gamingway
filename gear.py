@@ -223,7 +223,7 @@ class Armor(Equipment):
   rom.setbit(address + 4, 6, self.mystery_flag)
   rom.setbit(address + 4, 7, self.shield)
   self.races.write(rom, address + 5)
-  rom.data[address + 6] = (self.slots.index(self.slot) << 6) + self.equips
+  rom.data[address + 6] = (self.slot << 6) + self.equips
   self.statbuff.write(rom, address + 7)
  
  # Return a string containing all the armor's information.
