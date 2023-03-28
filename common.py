@@ -1,41 +1,65 @@
+# A FlagSet is a generic collection of flag settings. It can be used for a wide
+# variety of things, but most commonly would be for things like race flags, equip
+# permission flags, elemental or status flags, and the like. A number of objects
+# either extend this class or use it as a member.
 class FlagSet:
  
  def __init__(self, width = 1):
+
+  
+  # The width which is the number of bytes the FlagSet spans; every eight flags is 
+  # one byte. So if you need 1-8 flags, that would be a width of 1; 9-16 flags would
+  # have a width of 2 and so on.
   self.width = width
+
+  # The flags are just stored as an array of booleans.
   self.flags = [False] * 8 * width
  
+ # Read eight flags from the given byte. The offset indicates which chunk of eight
+ # flags the byte should be read into. The byte is treated as eight individual bits
+ # which each encode a flag setting, with 0 as False and 1 as True.
  def from_byte(self, byte, offset = 0):
   for bit in range(8):
    self.flags[offset * 8 + bit] = True if (byte >> bit) & 1 else False
  
+ # This constructs a byte from eight of the flags. The offset indicates which chunk
+ # of eight flags to encode.
  def to_byte(self, offset = 0):
   byte = 0
   for bit in range(8):
    byte |= (1 << bit) if self.flags[offset * 8 + bit] else 0
   return byte
  
+ # Read a list of bytes and encode them as flags.
  def from_bytes(self, bytes):
   for index, byte in enumerate(bytes):
    self.from_byte(byte, index)
- 
+
+ # Construct a list of bytes from the flags. 
  def to_bytes(self):
   result = []
   for index in range(self.width):
    result.append(self.to_byte(index))
   return result
  
+ # Read the flags from the rom at the given address. The width determines how many
+ # bytes to read and interpret as flag settings.
  def read(self, rom, address):
   if self.width > 1:
    self.from_bytes(rom.data[address:address + width])
   else:
    self.from_byte(rom.data[address])
  
+ # Construct the appropriate number of bytes from the flags and write them to the
+ # rom. The width determines the number of bytes needed.
  def write(self, rom, address):
   if self.width > 1:
    rom.inject(address, self.to_bytes())
   else:
    rom.data[address] = self.to_byte()
  
+ # Return a string containing the flag information. The flagnames list is assumed to
+ # be the same length as the number of flags in the FlagSet.
  def display(self, main, flagnames = []):
   result = ""
   if len(flagnames) > 0:
@@ -49,6 +73,10 @@ class FlagSet:
     result += "X" if flag else "-"
   return result
 
+# This represents a set of elemental and status flags. Elements and statuses seem to
+# be treated as the same type of thing by the game, at least as far as most of the
+# data is concerned; this library refers to them collectively as attributes. Thus it
+# is common for things to have an index into a global list of these AttributeTables.
 class AttributeTable(FlagSet):
 
  def __init__(self):
