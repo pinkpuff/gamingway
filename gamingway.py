@@ -12,18 +12,17 @@ class FF4Rom:
 
  def __init__(self, filename):
   # A rom file is required in order to have a functioning FF4Rom.
-  # The raw bytes are read from the rom into the "romdata" varaible.
+  # The raw bytes are read from the rom into the "romdata" varaible, which is then
+  # passed to the "rom" subcomponent. So if you create an FF4Rom called "ff4" you 
+  # can access the raw bytes directly via something like "ff4.rom.data[index]".
   # Abstract game objects are not created at this stage.
   # To generate the game objects, call the "read" function.
-  #
-  # The reason for doing it this way is because modified roms might
-  # store certain data in different ways that are incompatible with the
-  # assumptions made by this program. Thus, if we read all the data
-  # into abstract objects from the start, it could crash the program
-  # trying to read data that may not even be relevant to the changes
-  # the user wishes to make. Therefore the data reading is done only
-  # when explicitly called by the user, and only the type(s) of data
-  # requested.
+  # The reason for doing it this way is because modified roms might store certain
+  # data in different ways that are incompatible with the assumptions made by this 
+  # program. Thus, if we read all the data into abstract objects from the start, it 
+  # could crash the program trying to read data that may not even be relevant to the
+  # changes the user wishes to make. Therefore the data reading is done only when 
+  # explicitly called by the user, and only the type(s) of data requested.
 
   # Get the raw data from the file.
   with open(filename, "rb") as ff4file:
@@ -32,24 +31,24 @@ class FF4Rom:
   # Determine if the rom has a header. We default to it having a header.
   self.headered = True
 
-  # If the first two bytes match what we expect from an unheadered rom,
-  # we assume that's what it is.
+  # If the first two bytes match what we expect from an unheadered rom, we assume 
+  # that's what it is.
   if romdata[0:2] == [0x78, 0x18]:
    self.headered = False
 
-   # Pad the beginning with enough 0s to make the data line up with
-   # that of a headered rom. (This will be removed when saving.)
+   # Pad the beginning with enough 0s to make the data line up with that of a 
+   # headered rom. (This will be removed when saving.)
    romdata = [0] * 0x200 + romdata
   
-  # Initialize the subcomponents that handle various aspects of reading
-  # or modifying the rom.
+  # Initialize the subcomponents that handle various aspects of reading or modifying
+  # the rom.
   self.rom = rom.RomData(romdata)
   self.text = text.TextInterface()
   self.config = config.Configuration()
 
-  # Initialize the game data objects to be empty. This way you can
-  # refer to them and pass them around without causing errors even
-  # if you haven't read that particular type of data yet.
+  # Initialize the game data objects to be empty. This way you can refer to them and 
+  # pass them around without causing errors even if you haven't read that particular 
+  # type of data yet.
   self.attributes = []
   self.equips = []
   self.spells = []
@@ -58,15 +57,15 @@ class FF4Rom:
   self.characters = []
   self.maps = []
   
+ # Export the raw bytes to a file.
+ # This won't automatically convert the abstract game objects into bytecode; that 
+ # has to be done manually using the "write" function first if you want any changes 
+ # you made to be committed. So if you find yourself wondering why your rom doesn't
+ # seem to have changed despite saving it, make sure you're calling "write" first.
  def save(self, filename):
-  # Export the raw bytes to a file.
-  #
-  # This won't automatically convert the abstract game objects into
-  # bytecode; that has to be done manually using the "write" function
-  # first if you want any changes you made to be committed.
   
-  # The romdata variable is stored as a list, so first we need to
-  # convert it into bytes that can be written to the file.
+  # The rom data variable is stored as a list, so first we need to convert it into 
+  # bytes that can be written to the file.
   output = bytearray(self.rom.data)
   
   # If we had to add a placeholder header, we remove it before saving.
@@ -77,16 +76,17 @@ class FF4Rom:
   with open(filename, "wb") as ff4file:
    ff4file.write(output)
 
+ # Reads all the data of the specified type from the bytes in the rom and converts 
+ # it into abstract game objects. If no type is specified, it defaults to reading 
+ # ALL game data. If you wish to read multiple types of data without reading all of
+ # them, call this method multiple times with different arguments.
  def read(self, datatype = "all"):
-  # Reads all the data of the specified type from the bytes in the rom
-  # and converts it into abstract game objects. If no type is
-  # specified, it defaults to reading ALL game data.
-  #
-  # If you wish to read multiple types of data without reading all of
-  # them, call this method multiple times with different arguments.
   
   # Convert the given datatype to all lowercase for consistency.
   datatype = datatype.lower()
+  
+  # Then check for each category and subtype.
+  # A full breakdown of the data category structure is in the readme.
   if datatype in ["all", "magic", "gear", "spells", "items"]:
    self.attributes = common.read_attributes(self.rom)
   if datatype in ["all", "magic", "spells"]:
@@ -114,19 +114,17 @@ class FF4Rom:
   if datatype in ["all", "world", "overworld"]:
    self.overworld = world.read_overworld(self.rom)
  
+ # Writes all the data of the specified type from the abstract game objects and 
+ # converts it into the raw bytes. If no type is specified, it defaults to writing 
+ # ALL game data. If you wish to write multiple types of data without writing all of
+ # them, call this method multiple times with different arguments.
  def write(self, datatype = "all"):
-  # Writes all the data of the specified type from the abstract game
-  # objects and converts it into the raw bytes. If no type is
-  # specified, it defaults to writing ALL game data.
-  #
-  # If you wish to write multiple types of data without writing all of
-  # them, call this method multiple times with different arguments.
-  #
-  # Writing certain types of data can cause a slight misalignment in
-  # the data, the pointers, or both, even if you change nothing. I'm
-  # not completely sure why this happens, but as far as I can tell it
-  # doesn't affect actual gameplay. In any case, each type of data
-  # known to do this is tagged below with a comment to that effect.
+
+  # Writing certain types of data can cause a slight misalignment in the data, the 
+  # pointers, or both, even if you change nothing. I'm not completely sure why this 
+  # happens, but as far as I can tell it doesn't affect actual gameplay. In any 
+  # case, each type of data known to do this is tagged below with a comment to that 
+  # effect.
   
   # Convert the given datatype to all lowercase for consistency.
   datatype = datatype.lower()
@@ -161,8 +159,9 @@ class FF4Rom:
    result = entity.display(self)
   return result
  
+ # Creates aliases for the player spells.
  def set_spell_constants(self):
-  # Creates aliases for the player spells.
+
   # The names are used from vanilla where possible.
   # Punctuation, spell orbs, and other symbols are omitted.
   # In the case of "dummy" or otherwise unnamed spells, 
@@ -312,8 +311,8 @@ class FF4Rom:
   if len(self.spells) > 71:
    self.IMAGE_SPELL = self.spells[71]
 
+ # Creates aliases for the spellbooks.
  def set_spellbook_constants(self):
-  # Creates aliases for the spellbooks.
   if len(self.spellbooks) > 0:
    self.CECIL_WHITE = self.spellbooks[0]
   if len(self.spellbooks) > 1:
@@ -341,13 +340,17 @@ class FF4Rom:
   if len(self.spellbooks) > 12:
    self.EDGE_NINJA = self.spellbooks[12]
 
+ # Constants referencing particular items.
  def set_item_constants(self):
-  # Constants referencing the indexes of particular items.
+
   # Names go by the FF2US original SNES translation where possible.
-  # Names omit the initial symbol, but usually spell it out at the end, except where it seems unnecessary (e.g. it's not "spear spear" or "excalibur sword")
-  # Some have aliases, especially those with shortened names like "Excalbur"/"Excalibur"
-  # Dummied consumables use the Free Enterprise naming conventions, with the obvious exception of the summon orbs.
-  # Punctuation symbols are also skipped.
+  # Punctuation symbols are skipped.
+  # Names omit the initial symbol, but usually spell it out at the end, except where 
+  # it's clearly unnecessary (e.g. it's not "spear spear" or "excalibur sword")
+  # Some have aliases, especially those with shortened names like
+  # "Excalbur"/"Excalibur".
+  # Dummied consumables use the Free Enterprise naming conventions, with the
+  # exception of the summon orbs. 
   if len(self.items) > 0x00:
    self.NOWEAPON = self.items[0x00]
   if len(self.items) > 0x01:
@@ -605,7 +608,8 @@ class FF4Rom:
   if len(self.items) > 0x7F:
    self.NINJAHAT = self.items[0x7F]
   if len(self.items) > 0x80:
-   self.GLASS, self.GLASSHELM, self.GLASSHAT = self.items[0x80], self.items[0x80], self.items[0x80]
+   self.GLASS, self.GLASSHELM = self.items[0x80], self.items[0x80]
+   self.GLASSHAT, self.GLASSMASK = self.items[0x80], self.items[0x80]
   if len(self.items) > 0x81:
    self.IRONMAIL = self.items[0x81]
   if len(self.items) > 0x82:
@@ -851,12 +855,14 @@ class FF4Rom:
    self.TOWERKEY = self.items[0xFA]
   if len(self.items) > 0xFB:
    self.DARKMATTER = self.items[0xFB]
-  # Items 0xFC and 0xFD went unused in vanilla so even though they have uses in Free Enterprise, they remain unnamed here.
+  # Items 0xFC and 0xFD went unused in vanilla, so even though they have names and
+  # uses in Free Enterprise, they remain unnamed here.
   if len(self.items) > 0xFE:
    self.SORT = self.items[0xFE]
   if len(self.items) > 0xFF:
    self.TRASHCAN = self.items[0xFF]
 
+ # Constants referencing the characters.
  def set_character_constants(self):
   self.DKCECIL = self.characters[0]
   self.KAIN = self.characters[1]
@@ -871,7 +877,8 @@ class FF4Rom:
   self.CID = self.characters[10]
   self.EDGE = self.characters[11]
   self.FUSOYA = self.characters[12]
-  
+ 
+ # Constants referencing the maps.
  def set_map_constants(self):
   self.BARON_TOWN = self.maps[0]
   self.MIST_TOWN = self.maps[1]
