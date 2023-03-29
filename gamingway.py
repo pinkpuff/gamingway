@@ -141,6 +141,8 @@ class FF4Rom:
    gear.write_items(self.rom, self.text, self.items)
   if datatype in ["all", "party", "characters"]:
    party.write_characters(self.rom, self.characters)
+  if datatype in ["all", "party", "actors"]:
+   party.write_actors(self.rom, self.actors)
   if datatype in ["all", "combat", "monsters"]:
    # Causes a slight data misalignment, even with no changes.
    combat.write_monsters(self.rom, self.text, self.monsters)
