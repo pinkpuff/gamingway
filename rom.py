@@ -6,6 +6,9 @@ class RomData:
   # Constants representing locations of various data in the rom.
   # Ordering them by address helps with debugging and makes it more useful as a
   # general reference resource.
+  self.ACTOR_LOADS_START =        0x0689A
+  self.ACTOR_STORES_START =       0x0691D
+  self.ACTOR_NAME_INDEXES_START = 0x08657
   self.MONSTER_NAMES_START =      0x71A00
   self.MONSTER_GP_START =         0x72200
   self.MONSTER_XP_START =         0x723C0
@@ -25,12 +28,14 @@ class RomData:
   self.EQUIP_TABLES_START =       0x7A750
   self.ATTRIBUTE_TABLES_START =   0x7A790
   self.CHARACTER_DATA_START =     0x7AB00
+  self.ACTOR_EQUIPPED_START =     0x7AD00
   self.LEVELUP_POINTERS_START =   0x7B700
   self.LEVELUP_TABLE_START =      0x7B728
   self.LEVELUP_TABLE_END =        0x7C800
   self.SPELL_PROGRESSIONS_START = 0x7C900
   self.STARTING_SPELLS_START =    0x7CAC0
   self.MONSTER_VISUALS_START =    0x7CC00
+  self.ACTOR_COMMANDS_START =     0x9FF50
   self.MAP_NAMES_START =          0xA9820
   self.MAP_DATA_START =           0xA9E84
   self.OVERWORLD_POINTERS_START = 0xB0200
@@ -57,6 +62,7 @@ class RomData:
   self.TOTAL_SUPPLIES = 0x2E
   self.TOTAL_TOOLS = 0x22
   self.TOTAL_CHARACTERS = 13
+  self.TOTAL_ACTORS = 20
   self.LEVELUP_TABLE_BONUS = 0x70200
   self.MONSTER_NAME_WIDTH = 8
   self.TOTAL_MONSTERS = 224

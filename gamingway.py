@@ -55,6 +55,7 @@ class FF4Rom:
   self.spellbooks = []
   self.items = []
   self.characters = []
+  self.actors = []
   self.maps = []
   
  # Export the raw bytes to a file.
@@ -103,6 +104,8 @@ class FF4Rom:
   if datatype in ["all", "party", "characters"]:
    self.characters = party.read_characters(self.rom)
    self.set_character_constants()
+  if datatype in ["all", "party", "actors"]:
+   self.actors = party.read_actors(self.rom)
   if datatype in ["all", "combat", "monsters"]:
    self.monsters = combat.read_monsters(self.rom, self.text)
   if datatype in ["all", "world", "mapnames"]:
