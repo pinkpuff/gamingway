@@ -1,4 +1,4 @@
-def set_character_constants(main):
+def set_constants(main):
  main.DKCECIL = main.characters[0]
  main.KAIN = main.characters[1]
  main.RYDIA = main.characters[2]

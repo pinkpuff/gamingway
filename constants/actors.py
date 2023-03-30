@@ -2,7 +2,7 @@
 # the end, even if it's the only actor of that character. The index of the actor is
 # relative to the order the actors would join you in vanilla.
 
-def set_actor_constants(main):
+def set_constants(main):
  if len(main.actors) > 0:
   main.DKCECIL1 = main.actors[0]
  if len(main.actors) > 1:

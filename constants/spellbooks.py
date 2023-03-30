@@ -1,4 +1,4 @@
-def set_spellbook_constants(main):
+def set_constants(main):
  if len(main.spellbooks) > 0:
   main.CECIL_WHITE = main.spellbooks[0]
  if len(main.spellbooks) > 1:

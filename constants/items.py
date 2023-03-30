@@ -1,13 +1,4 @@
-def set_item_constants(main):
-
- # Names go by the FF2US original SNES translation where possible.
- # Punctuation symbols are skipped.
- # Names omit the initial symbol, but usually spell it out at the end, except where 
- # it's clearly unnecessary (e.g. it's not "spear spear" or "excalibur sword")
- # Some have aliases, especially those with shortened names like
- # "Excalbur"/"Excalibur".
- # Dummied consumables use the Free Enterprise naming conventions, with the
- # exception of the summon orbs. 
+def set_constants(main):
  if len(main.items) > 0x00:
   main.NOWEAPON = main.items[0x00]
  if len(main.items) > 0x01:

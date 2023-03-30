@@ -3,6 +3,7 @@ import constants.spellbooks as spellbooks
 import constants.items as items
 import constants.characters as characters
 import constants.actors as actors
+import constants.commands as commands
 import constants.maps as maps
 
 # This file mainly exists as a convenience so I don't have to import all those
@@ -22,20 +23,29 @@ import constants.maps as maps
 # "Proper name" items like Excalibur don't have a suffix, as EXCALIBUR_SWORD seems a
 # little awkward and unintuitive.
 
+# Objects that were "dummied" or otherwise had no names in vanilla but do have names
+# in Free Enterprise use the Free Enterprise naming convention. Objects that had no
+# name in either use names that I personally find intuitive. Fortunately python is
+# very loose with the notion of "constants" so you can just redefine them as you
+# see fit, even from within your own project that you're importing Gamingway into.
+
 def set_spell_constants(main):
- spells.set_spell_constants(main)
+ spells.set_constants(main)
 
 def set_spellbook_constants(main):
- spellbooks.set_spellbook_constants(main)
+ spellbooks.set_constants(main)
 
 def set_item_constants(main):
- items.set_item_constants(main)
+ items.set_constants(main)
 
 def set_character_constants(main):
- characters.set_character_constants(main)
+ characters.set_constants(main)
 
 def set_actor_constants(main):
- actors.set_actor_constants(main)
+ actors.set_constants(main)
+
+def set_command_constants(main):
+ commands.set_constants(main)
 
 def set_map_constants(main):
- maps.set_map_constants(main)
+ maps.set_constants(main)

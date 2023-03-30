@@ -1,9 +1,4 @@
-def set_spell_constants(main):
-
- # The names are used from vanilla where possible.
- # Punctuation, spell orbs, and other symbols are omitted.
- # In the case of "dummy" or otherwise unnamed spells, 
- # the Free Enterprise naming convention is used.
+def set_constants(main):
  if len(main.spells) > 0:
   main.NO_SPELL = main.spells[0]
  if len(main.spells) > 1:

@@ -1,4 +1,4 @@
-def set_map_constants(main):
+def set_constants(main):
  main.BARON_TOWN = main.maps[0]
  main.MIST_TOWN = main.maps[1]
  main.KAIPO_TOWN = main.maps[2]
