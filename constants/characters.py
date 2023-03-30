@@ -8,7 +8,7 @@ def set_character_constants(main):
  main.YANG = main.characters[6]
  main.PALOM = main.characters[7]
  main.POROM = main.characters[8]
- main.PALADINCECIL = main.characters[9]
+ main.PALADINCECIL, main.CECIL = main.characters[9], main.characters[9]
  main.CID = main.characters[10]
  main.EDGE = main.characters[11]
  main.FUSOYA = main.characters[12]
