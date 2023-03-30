@@ -4,8 +4,9 @@ class Command:
  
  def __init__(self):
   self.name = ""
-  self.target = 0
   self.mystery_amount = 0
+  self.target = 0
+  self.mystery_flag = False
   self.delay_index = 0
   self.statuses = FlagSet(2)
   self.charging_stance = 0
@@ -20,12 +21,13 @@ class Command:
   rom.inject(address, text.to_bytes(newname))
  
  def read_target(self, rom, address):
-  target = rom.data[address] % 8
-  mystery_amount = rom.data[address] >> 3
+  self.mystery_amount = rom.data[address] % 0x10
+  self.target = (rom.data[address] >> 4) % 8
+  self.mystery_flag = rom.flag(rom.data[address], 7)
  
  def write_target(self, rom, address):
-  rom.data[address] = self.target % 8
-  rom.data[address] += self.mystery_amount << 3
+  rom.data[address] = self.mystery_amount + (self.target << 4)
+  rom.setbit(address, 7, self.mystery_flag)
 
  def read_delay(self, rom, address):
   self.delay_index = rom.data[address]

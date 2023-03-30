@@ -2,11 +2,11 @@ import rom
 import config
 import common
 import text
-import magic
-import gear
-import party
-import combat
-import world
+import categories.magic as magic
+import categories.gear as gear
+import categories.party as party
+import categories.combat as combat
+import categories.world as world
 
 class FF4Rom:
 
@@ -1145,3 +1145,4 @@ class FF4Rom:
   # Map 253 is the Moon surface
   # Map 254 is whatever map you're currently on
   # Map 255 is used for some kind of visual effect
+
