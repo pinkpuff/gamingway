@@ -1,5 +1,6 @@
 from character import Character
 from actor import Actor
+from command import Command
 
 # Read all the characters from the rom.
 def read_characters(rom):
@@ -40,3 +41,23 @@ def write_actors(rom, actors):
   actor.write_storing(rom, rom.ACTOR_STORES_START + index)
   actor.write_commands(rom, rom.ACTOR_COMMANDS_START + index * 5)
   actor.write_equipped(rom, rom.ACTOR_EQUIPPED_START + index * 7)
+
+def read_commands(rom, text):
+ commands = []
+ for index in range(rom.TOTAL_COMMANDS):
+  command = Command()
+  commands.append(command)
+  offset = index * rom.COMMAND_NAME_WIDTH
+  command.read_name(rom, rom.COMMAND_NAMES_START + offset, text)
+  command.read_target(rom, rom.COMMAND_TARGETS_START + index)
+  command.read_statuses(rom, rom.COMMAND_STATUSES_START + index * 2)
+  command.read_charging(rom, rom.COMMAND_CHARGINGS_START + index)
+ return commands
+
+def write_commands(rom, text, commands):
+ for index, command in enumerate(commands):
+  offset = index * rom.COMMAND_NAME_WIDTH
+  command.write_name(rom, rom.COMMAND_NAMES_START + offset, text)
+  command.write_target(rom, rom.COMMAND_TARGETS_START + index)
+  command.write_statuses(rom, rom.COMMAND_STATUSES_START + index * 2)
+  command.write_charging(rom, rom.COMMAND_CHARGINGS_START + index)

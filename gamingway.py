@@ -106,6 +106,8 @@ class FF4Rom:
    self.set_character_constants()
   if datatype in ["all", "party", "actors"]:
    self.actors = party.read_actors(self.rom)
+  if datatype in ["all", "party", "commands"]:
+   self.commands = party.read_commands(self.rom, self.text)
   if datatype in ["all", "combat", "monsters"]:
    self.monsters = combat.read_monsters(self.rom, self.text)
   if datatype in ["all", "world", "mapnames"]:
@@ -143,6 +145,8 @@ class FF4Rom:
    party.write_characters(self.rom, self.characters)
   if datatype in ["all", "party", "actors"]:
    party.write_actors(self.rom, self.actors)
+  if datatype in ["all", "party", "commands"]:
+   party.write_commands(self.rom, self.text, self.commands)
   if datatype in ["all", "combat", "monsters"]:
    # Causes a slight data misalignment, even with no changes.
    combat.write_monsters(self.rom, self.text, self.monsters)

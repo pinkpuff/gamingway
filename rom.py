@@ -27,6 +27,7 @@ class RomData:
   self.SPELL_SOUNDS_START =       0x7A54F
   self.EQUIP_TABLES_START =       0x7A750
   self.ATTRIBUTE_TABLES_START =   0x7A790
+  self.COMMAND_NAMES_START =      0x7A9C6
   self.CHARACTER_DATA_START =     0x7AB00
   self.ACTOR_EQUIPPED_START =     0x7AD00
   self.LEVELUP_POINTERS_START =   0x7B700
@@ -35,11 +36,15 @@ class RomData:
   self.SPELL_PROGRESSIONS_START = 0x7C900
   self.STARTING_SPELLS_START =    0x7CAC0
   self.MONSTER_VISUALS_START =    0x7CC00
+  self.COMMAND_STATUSES_START =   0x9FF19
   self.ACTOR_COMMANDS_START =     0x9FF50
+  self.COMMAND_TARGETS_START =    0x9FFC3
+  self.COMMAND_DELAYS_START =     0xA0089
   self.MAP_NAMES_START =          0xA9820
   self.MAP_DATA_START =           0xA9E84
   self.OVERWORLD_POINTERS_START = 0xB0200
   self.OVERWORLD_DATA_START =     0xB0680
+  self.COMMAND_CHARGINGS_START =  0xB7E60
   self.TILEMAP_POINTERS_START =   0xB8200
   self.TILEMAP_DATA_START =       0xB8500
   
@@ -75,6 +80,8 @@ class RomData:
   self.TOTAL_OVERWORLD_TILEMAPS = 0x100
   self.TILEMAP_OVERWORLD_BONUS = 0xB8200
   self.TILEMAP_UNDERMOON_BONUS = 0xC0200
+  self.TOTAL_COMMANDS = 26
+  self.COMMAND_NAME_WIDTH = 5
 
  # This directly injects a sequence of bytes into the romdata, starting
  # at the given address. No safety checks or any other kind of checks
