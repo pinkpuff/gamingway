@@ -147,7 +147,7 @@ def set_constants(main):
   main.EVILMASK =   main.monsters[144]
   main.HORSEMAN =   main.monsters[145]
   main.REDGIANT =   main.monsters[146]
-  main.STALEMAM =   main.monsters[147]
+  main.STALEMAN =   main.monsters[147]
   main.FATALEYE =   main.monsters[148]
   main.D_LUNAR =    main.monsters[149]
   main.SEARCHER =   main.monsters[150]
