@@ -215,11 +215,12 @@ class Monster:
   weaknesslist = self.config.index_list(weakness, "elements")
   
   # Then process the list.
-  for index in weaknesslist:
-   self.weaknesses.flags[index] = True
+  if len(weaknesslist) > 0:
+   for index in weaknesslist:
+    self.weaknesses.flags[index] = True
 
-  # Make sure we set the "has_weaknesses" flag.
-  self.has_weaknesses = True
+   # Make sure we set the "has_weaknesses" flag.
+   self.has_weaknesses = True
  
  # This sets the monster's weaknesses to the given list. All flags included in the
  # list will be set in the monster's weaknesses, and all flags not included will be
@@ -258,3 +259,54 @@ class Monster:
   # Update the "has_weaknesses" flag appropriately.
   self.has_weaknesses = (len(self.weaknesses.flags) > 0)
 
+ # This gives the monster one or more additional races. You can specify it as an
+ # index, as a string matching one of the race names in the config, or as a list of
+ # either of the above. This also automaticaly sets the monster's "has_races" flag.
+ def add_race(self, race):
+  
+  # Convert the parameter to a list of race flag indexes.
+  racelist = self.config.index_list(race, "races")
+
+  # Then process the list.
+  if len(racelist) > 0:
+   for index in racelist:
+    self.races.flags[index] = True
+  
+   # Make sure we set the "has_races" flag.
+   self.has_races = True
+ 
+ # This sets the monster's races to the given list. All flags included in the list
+ # will be set in the monster's races, and all the flags not included will be unset.
+ # The flags can be specified by name as per the config or by index. A single string
+ # or integer will be interpreted as a list containing only that flag. If this
+ # results in the monster having no races, its "has_races" flag will be unset.
+ def set_race(self, race):
+  
+  # Convert the parameter to a list of race indexes.
+  racelist = self.config.index_list(race, "races")
+
+  # Then process the list.
+  for index in range(len(self.config.race_names)):
+   if index in racelist:
+    self.races.flags[index] = True
+   else:
+    self.races.flags[index] = False
+
+  # Update the "has_races" flag appropriately.
+  self.has_races = (len(self.races.flags) > 0)
+
+ # This removes an elemtn from teh monster's races. You can specify it as an index,
+ # as a string matching one of the race names in teh config, or as a list of eihter
+ # of the above. If this results in the monster having no remaining races, it will
+ # unset the monster's "has_races" flag.
+ def remove_race(self, race):
+
+  # Convert the parameter to a list of race indexes.
+  racelist = self.config.index_list(race, "races")
+
+  # Then process the list.
+  for index in racelist:
+   self.races.flag[index] = False
+
+  # Update the "has_races" flag appropriately.
+  self.has_races = (len(self.races.flags) > 0)
