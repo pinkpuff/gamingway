@@ -156,7 +156,7 @@ def set_constants(main):
   main.PROCYOTE =   main.monsters[153]
   main.OGOPOGO =    main.monsters[154]
   main.BLUE_D =     main.monsters[155]
-  main.KING-RYU =   main.monsters[156]
+  main.KING_RYU =   main.monsters[156]
   main.CLAPPER =    main.monsters[157]
   main.PALE_DIM =   main.monsters[158]
   main.RED_D =      main.monsters[159]

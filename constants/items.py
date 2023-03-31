@@ -353,7 +353,7 @@ def set_constants(main):
  if len(main.items) > 0xAF:
   main.CURSEDRING = main.items[0xAF]
  if len(main.items) > 0xB0:
-  main.BOMB = main.items[0xB0]
+  main.LILBOMB = main.items[0xB0] # BOMB conflicts with the monster name
  if len(main.items) > 0xB1:
   main.BIGBOMB = main.items[0xB1]
  if len(main.items) > 0xB2:
