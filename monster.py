@@ -205,36 +205,32 @@ class Monster:
    result += "Reaction: [{}]".format(main.text.hex(self.reaction))
   return result
 
- # This gives the monster one or more additional weaknesses.
- # You can specify it as an index, as a string matching one of the
- # element names in the config, or as a list of either of the above.
+ # This gives the monster one or more additional weaknesses. You can specify it as 
+ # an index, as a string matching one of the element names in the config, or as a 
+ # list of either of the above.
  def add_weakness(self, weakness):
   
-  # This is used to see if something went wrong during the process of
-  # trying to decipher what kind of parameter the user passed.
+  # This is used to see if something went wrong during the process of trying to 
+  # decipher what kind of parameter the user passed.
   error = False
   
-  # Check the type of the parameter and try to convert it to a list of
-  # indexes.
+  # Check the type of the parameter and try to convert it to a list of indexes.
   # If it's a string, we try to interpret it as the name of an element.
   if type(weakness) == str:
   
-   # We don't care about case so we check the lowercase version of the
-   # parameter against the lowercase version of the element list in
-   # the config.
+   # We don't care about case so we check the lowercase version of the parameter 
+   # against the lowercase version of the element list in the config.
    if weakness.lower() in [x.lower() for x in self.config.element_names]:
     
-    # Convert it to a single-element list containing the index of the
-    # element.
+    # Convert it to a single-element list containing the index of the element.
     weaknesslist = [self.config.element_names.index(weakness)]
    
-   # If the string wasn't found in the list of elements, we can't
-   # process it, so we produce an error.
+   # If the string wasn't found in the list of elements, we can't process it, so we 
+   # produce an error.
    else:
     error = True
   
-  # If it's an integer, we try to interpret it as the index of an
-  # element.
+  # If it's an integer, we try to interpret it as the index of an element.
   elif type(weakness) == int:
   
    # If it's within the range of elements, it's valid.
@@ -243,14 +239,14 @@ class Monster:
     # Convert it to a single-element list.
     weaknesslist = [self.config.element_names[weakness]]
     
-   # If it's outside the range of elements, we can't process it, so we
-   # produce an error.
+   # If it's outside the range of elements, we can't process it, so we produce an 
+   # error.
    else:
     error = True
   
-  # If it's a list, we need to check each element for type and
-  # validity. While I don't expect anyone would mix types in the same
-  # list, we need to check type in order to check validity anyway.
+  # If it's a list, we need to check each element for type and validity. While I
+  # don't expect anyone would mix types in the same list, we need to check type in 
+  # order to check validity anyway.
   elif type(weakness) == list:
    
    # Start with an empty list.
@@ -259,8 +255,8 @@ class Monster:
    # Check each element in the list independently.
    for element in weakness:
    
-    # If it's a string, we check it the same way as above. If it is
-    # valid, add it to the list.
+    # If it's a string, we check it the same way as above. If it is valid, add it to
+    # the list.
     if type(element) == str:
      if element in [x.lower() for x in self.config.element_names]:
       weaknesslist.append(self.config.element_names.index(element))
@@ -274,13 +270,13 @@ class Monster:
      else:
       error = True
   
-   # If it's not a string, integer, or list, we don't know what to do
-   # with it, so we produce an error.
+   # If it's not a string, integer, or list, we don't know what to do with it, so we
+   # produce an error.
    else:
     error = True
   
-  # If we encountered an error anywhere in the above process, we report
-  # it and don't make any changes.
+  # If we encountered an error anywhere in the above process, we report it and don't
+  # make any changes.
   if error:
    print("Unknown weakness parameter: {}".format(weakness))
   
@@ -293,3 +289,11 @@ class Monster:
    # Add each flag index in the list to the monster's weaknesses.
    for index in weaknesslist:
     self.weaknesses.flags[index] = True
+
+ # This sets the monster's weaknesses to the given list, regardless of their
+ # previous settings. As opposed to the add_weakness function which leaves any 
+ # already set flags alone, this will unset all element flags which weren't included
+ # in the list. You can also pass it a single element as a string or index which it
+ # will interpret as a list containing only that element.
+ def set_weakness(self, weakness):
+  pass

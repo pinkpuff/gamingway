@@ -177,3 +177,38 @@ class Configuration:
    "25%",
    "100%"
   ]
+  
+ def index_list(self, candidate, datatype):
+  error = False
+  datatype = datatype.lower()
+  if datatype in ["stat", "stats"]:
+   pass
+  elif datatype in ["race", "races"]:
+   pass
+  elif datatype in ["element", "elements"]:
+   pass
+  elif datatype in ["persistent", "persistent status", "persistent statuses"]:
+   pass
+  elif datatype in ["temporary", "temoporary status", "temporary statuses"]:
+   pass
+  elif datatype in ["attribute", "attributes"]:
+   pass
+  elif datatype in ["hidden", "hidden status", "hidden statuses"]:
+   pass
+  elif datatype in ["system", "system status", "system statuses"]:
+   pass
+  elif datatype in ["job", "jobs"]:
+   pass
+  elif datatype in ["slot", "slots", "equip slot", "equip slots"]:
+   pass
+  elif datatype in ["target", "targets", "target type", "target types"]:
+   pass
+  elif datatype in ["effect", "effects", "spell effect", "spell effects"]:
+   pass
+  elif datatype in ["drop rate", "drop rates", "item drop rate", "item drop rates"]:
+   pass
+  else:
+   print("Unknown data type")
+   error = True
+  if not error:
+   
