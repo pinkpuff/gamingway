@@ -209,91 +209,26 @@ class Monster:
  # an index, as a string matching one of the element names in the config, or as a 
  # list of either of the above.
  def add_weakness(self, weakness):
-  
-  # This is used to see if something went wrong during the process of trying to 
-  # decipher what kind of parameter the user passed.
-  error = False
-  
-  # Check the type of the parameter and try to convert it to a list of indexes.
-  # If it's a string, we try to interpret it as the name of an element.
-  if type(weakness) == str:
-  
-   # We don't care about case so we check the lowercase version of the parameter 
-   # against the lowercase version of the element list in the config.
-   if weakness.lower() in [x.lower() for x in self.config.element_names]:
-    
-    # Convert it to a single-element list containing the index of the element.
-    weaknesslist = [self.config.element_names.index(weakness)]
-   
-   # If the string wasn't found in the list of elements, we can't process it, so we 
-   # produce an error.
-   else:
-    error = True
-  
-  # If it's an integer, we try to interpret it as the index of an element.
-  elif type(weakness) == int:
-  
-   # If it's within the range of elements, it's valid.
-   if weakness < len(self.config.element_names):
-   
-    # Convert it to a single-element list.
-    weaknesslist = [self.config.element_names[weakness]]
-    
-   # If it's outside the range of elements, we can't process it, so we produce an 
-   # error.
-   else:
-    error = True
-  
-  # If it's a list, we need to check each element for type and validity. While I
-  # don't expect anyone would mix types in the same list, we need to check type in 
-  # order to check validity anyway.
-  elif type(weakness) == list:
-   
-   # Start with an empty list.
-   weaknesslist = []
-   
-   # Check each element in the list independently.
-   for element in weakness:
-   
-    # If it's a string, we check it the same way as above. If it is valid, add it to
-    # the list.
-    if type(element) == str:
-     if element in [x.lower() for x in self.config.element_names]:
-      weaknesslist.append(self.config.element_names.index(element))
-     else:
-      error = True
-    
-    # Likewise if it's an integer.
-    elif type(element) == int:
-     if element < len(self.config.element_names):
-      weaknesslist.append(self.config.element_names[element])
-     else:
-      error = True
-  
-   # If it's not a string, integer, or list, we don't know what to do with it, so we
-   # produce an error.
-   else:
-    error = True
-  
-  # If we encountered an error anywhere in the above process, we report it and don't
-  # make any changes.
-  if error:
-   print("Unknown weakness parameter: {}".format(weakness))
-  
-  # Otherwise, we process the list.
-  else:
-  
-   # Set the weakness flag just in case it wasn't already set.
-   self.has_weaknesses = True
-   
-   # Add each flag index in the list to the monster's weaknesses.
-   for index in weaknesslist:
-    self.weaknesses.flags[index] = True
 
- # This sets the monster's weaknesses to the given list, regardless of their
- # previous settings. As opposed to the add_weakness function which leaves any 
- # already set flags alone, this will unset all element flags which weren't included
- # in the list. You can also pass it a single element as a string or index which it
- # will interpret as a list containing only that element.
+  # Convert the parameter to a list of element flag indexes.
+  weaknesslist = self.config.index_list(weakness, "elements")
+  
+  # Then process the list.
+  for index in weaknesslist:
+   self.weaknesses.flags[index] = True
+ 
+ # This sets the monster's weaknesses to the given list. All flags included in the
+ # list will be set in the monster's weaknesses, and all flags not included will be
+ # unset. The flags can be specified by name as per the config or by index. A single
+ # string or integer will be interpreted as a list containing only that flag.
  def set_weakness(self, weakness):
-  pass
+
+  # Convert the parameter to a list of element flag indexes.
+  weaknesslist = self.config.index_list(weakness, "elements")
+
+  # Then process the list.
+  for index in range(len(self.config.element_names)):
+   if index in weaknesslist:
+    self.weaknesses.flags[index] = True
+   else:
+    self.weaknesses.flags[index] = False

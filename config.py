@@ -227,8 +227,8 @@ class Configuration:
     flaglist = []
     for item in candidate:
      if type(item) == str:
-      if candidate.lower() in [x.lower() for x in typelist]:
-       flaglist.append(typelist.index(candidate))
+      if item.lower() in [x.lower() for x in typelist]:
+       flaglist.append(typelist.index(item))
       else:
        error = True
      elif type(item) == int:
