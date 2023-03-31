@@ -4,6 +4,7 @@ import constants.items as items
 import constants.characters as characters
 import constants.actors as actors
 import constants.commands as commands
+import constants.monsters as monsters
 import constants.maps as maps
 
 # This file mainly exists as a convenience so I don't have to import all those
@@ -46,6 +47,9 @@ def set_actor_constants(main):
 
 def set_command_constants(main):
  commands.set_constants(main)
+
+def set_monster_constants(main):
+ monsters.set_constants(main)
 
 def set_map_constants(main):
  maps.set_constants(main)

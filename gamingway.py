@@ -113,6 +113,7 @@ class FF4Rom:
    constants.set_command_constants(self)
   if datatype in ["all", "combat", "monsters"]:
    self.monsters = combat.read_monsters(self.rom, self.text)
+   constants.set_monster_constants(self)
   if datatype in ["all", "world", "mapnames"]:
    self.map_names = world.read_map_names(self.rom, self.text)
   if datatype in ["all", "world", "maps"]:
