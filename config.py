@@ -182,33 +182,66 @@ class Configuration:
   error = False
   datatype = datatype.lower()
   if datatype in ["stat", "stats"]:
-   pass
+   typelist = self.stat_names
   elif datatype in ["race", "races"]:
-   pass
+   typelist = self.race_names
   elif datatype in ["element", "elements"]:
-   pass
+   typelist = self.element_names
   elif datatype in ["persistent", "persistent status", "persistent statuses"]:
-   pass
+   typelist = self.persistent_status_names
   elif datatype in ["temporary", "temoporary status", "temporary statuses"]:
-   pass
+   typelist = self.temporary_status_names
   elif datatype in ["attribute", "attributes"]:
-   pass
+   typelist = self.status_names
+   typelist += self.persistent_status_names
+   typelist += self.temporary_status_names
   elif datatype in ["hidden", "hidden status", "hidden statuses"]:
-   pass
+   typelist = self.hidden_status_names
   elif datatype in ["system", "system status", "system statuses"]:
-   pass
+   typelist = self.system_status_names
   elif datatype in ["job", "jobs"]:
-   pass
+   typelist = self.job_names
   elif datatype in ["slot", "slots", "equip slot", "equip slots"]:
-   pass
+   typelist = self.equip_slots
   elif datatype in ["target", "targets", "target type", "target types"]:
-   pass
+   typelist = self.target_types
   elif datatype in ["effect", "effects", "spell effect", "spell effects"]:
-   pass
+   typelist = self.spell_effects
   elif datatype in ["drop rate", "drop rates", "item drop rate", "item drop rates"]:
-   pass
+   typelist = self.drop_rates
   else:
    print("Unknown data type")
    error = True
   if not error:
-   
+   if type(candidate) == str:
+    if candidate.lower() in [x.lower() for x in typelist]:
+     flaglist = [typelist.index(candidate)]
+    else:
+     error = True
+   elif type(candidate) == int:
+    if candidate < len(typelist):
+     flaglist = [candidate]
+    else:
+     error = True
+   elif type(candidate) == list:
+    flaglist = []
+    for item in candidate:
+     if type(item) == str:
+      if candidate.lower() in [x.lower() for x in typelist]:
+       flaglist.append(typelist.index(candidate))
+      else:
+       error = True
+     elif type(item) == int:
+      if item < len(typelist):
+       flaglist.append(item)
+      else:
+       error = True
+     else:
+      error = True
+   else:
+    error = True
+   if error:
+    print("Unknown data type")
+   else:
+    return flaglist
+
