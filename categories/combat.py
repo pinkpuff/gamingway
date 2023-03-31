@@ -1,10 +1,10 @@
 from monster import Monster
 
 # Read the list of monsters from the rom.
-def read_monsters(rom, text):
+def read_monsters(rom, text, config):
  monsters = []
  for index in range(rom.TOTAL_MONSTERS):
-  monster = Monster()
+  monster = Monster(config)
   monsters.append(monster)
   pointer = rom.MONSTER_POINTERS_START + index * 2
   offset = rom.data[pointer] + rom.data[pointer + 1] * 0x100
