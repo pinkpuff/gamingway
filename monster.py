@@ -207,7 +207,8 @@ class Monster:
 
  # This gives the monster one or more additional weaknesses. You can specify it as 
  # an index, as a string matching one of the element names in the config, or as a 
- # list of either of the above.
+ # list of either of the above. This also automatically sets the monster's
+ # "has_weaknesses" flag.
  def add_weakness(self, weakness):
 
   # Convert the parameter to a list of element flag indexes.
@@ -216,11 +217,16 @@ class Monster:
   # Then process the list.
   for index in weaknesslist:
    self.weaknesses.flags[index] = True
+
+  # Make sure we set the "has_weaknesses" flag.
+  self.has_weaknesses = True
  
  # This sets the monster's weaknesses to the given list. All flags included in the
  # list will be set in the monster's weaknesses, and all flags not included will be
  # unset. The flags can be specified by name as per the config or by index. A single
- # string or integer will be interpreted as a list containing only that flag.
+ # string or integer will be interpreted as a list containing only that flag. If
+ # this results in the monster having no weaknesses, its "has_weaknesses" flag will
+ # be unset.
  def set_weakness(self, weakness):
 
   # Convert the parameter to a list of element flag indexes.
@@ -232,3 +238,23 @@ class Monster:
     self.weaknesses.flags[index] = True
    else:
     self.weaknesses.flags[index] = False
+
+  # Update the "has_weaknesses" flag appropriately.
+  self.has_weaknesses = (len(self.weaknesses.flags) > 0)
+
+ # This removes an element from the monster's weaknesses. You can specify it as an
+ # index, as a string matching one of the element names in the config, or as a list
+ # of either of the above. If this results in the monster having no remaining
+ # weaknesses, it will unset the monster's "has_weaknesses" flag.
+ def remove_weakness(self, weakness):
+
+  # Convert the parameter to a list of element flag indexes.
+  weaknesslist = self.config.index_list(weakness, "elements")
+
+  # Then process the list.
+  for index in weaknesslist:
+   self.weaknesses.flags[index] = False
+
+  # Update the "has_weaknesses" flag appropriately.
+  self.has_weaknesses = (len(self.weaknesses.flags) > 0)
+
