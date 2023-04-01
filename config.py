@@ -177,6 +177,10 @@ class Configuration:
    "25%",
    "100%"
   ]
+
+  self.attribute_names = self.element_names 
+  self.attribute_names += self.persistent_status_names
+  self.attribute_names += self.temporary_status_names
   
  def index_list(self, candidate, datatype):
   error = False
@@ -192,9 +196,7 @@ class Configuration:
   elif datatype in ["temporary", "temoporary status", "temporary statuses"]:
    typelist = self.temporary_status_names
   elif datatype in ["attribute", "attributes"]:
-   typelist = self.status_names
-   typelist += self.persistent_status_names
-   typelist += self.temporary_status_names
+   typelist = self.attribute_names
   elif datatype in ["hidden", "hidden status", "hidden statuses"]:
    typelist = self.hidden_status_names
   elif datatype in ["system", "system status", "system statuses"]:

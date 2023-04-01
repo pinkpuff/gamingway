@@ -205,6 +205,114 @@ class Monster:
    result += "Reaction: [{}]".format(main.text.hex(self.reaction))
   return result
 
+ # This gives the monster one or more additional attack attributes. You can specify
+ # it as an index, as a string matching one of the element or status names in the
+ # config, or as a list of either of the above. This also automatically sets the
+ # monster's "has_attributes" flag.
+ def add_attribute(self, attribute):
+
+  # Convert the parameter to a list of attribute flag indexes.
+  attributelist = self.config.index_list(attribute, "attributes")
+  
+  # Then process the list.
+  if len(attributelist) > 0:
+   for index in attributelist:
+    self.attributes.flags[index] = True
+
+   # Make sure we set the "has_attributes" flag.
+   self.has_attributes = True
+
+ # This sets the monster's attack attributes to the given list. All flags included
+ # in the list will be set in the monster's attributes, and all flags not included
+ # will be unset. The flags can be specified by name as per the config or by index.
+ # A single string or integer will be interpreted as a list containing only that
+ # flag. If this results in the monster having no attributes, its "has_attributes"
+ # flag will be unset.
+ def set_attribute(self, attribute):
+
+  # Convert the parameter to a list of attribute flag indexes.
+  attributelist = self.config.index_list(attribute, "attributes")
+
+  # Then process the list.
+  for index in range(len(self.config.attribute_names)):
+   if index in attributelist:
+    self.attributes.flags[index] = True
+   else:
+    self.attributes.flags[index] = False
+
+  # Update the "has_attributes" flag appropriately.
+  self.has_attributes = (len(self.attributes.flags) > 0)
+
+ # This removes an element from the monster's attack attributes. You can specify it
+ # as an index, as a string matching one of the element names in the config, or as a
+ # list of either of the above. If this results in the monster having no remaining
+ # attributes, it will unset the monster's "has_attributes" flag.
+ def remove_attribute(self, attribute):
+
+  # Convert the parameter to a list of element flag indexes.
+  attributelist = self.config.index_list(attribute, "elements")
+
+  # Then process the list.
+  for index in attributelist:
+   self.attributes.flags[index] = False
+
+  # Update the "has_attributes" flag appropriately.
+  self.has_attributes = (len(self.attributes.flags) > 0)
+
+ # This gives the monster one or more additional resistances. You can specify it as 
+ # an index, as a string matching one of the element names in the config, or as a 
+ # list of either of the above. This also automatically sets the monster's
+ # "has_resistances" flag.
+ def add_resistance(self, resistance):
+
+  # Convert the parameter to a list of element flag indexes.
+  resistancelist = self.config.index_list(resistance, "elements")
+  
+  # Then process the list.
+  if len(resistancelist) > 0:
+   for index in resistancelist:
+    self.resistances.flags[index] = True
+
+   # Make sure we set the "has_resistances" flag.
+   self.has_resistance = True
+ 
+ # This sets the monster's resistances to the given list. All flags included in the
+ # list will be set in the monster's resistances, and all flags not included will be
+ # unset. The flags can be specified by name as per the config or by index. A single
+ # string or integer will be interpreted as a list containing only that flag. If
+ # this results in the monster having no resistances, its "has_resistances" flag 
+ # will be unset.
+ def set_resistance(self, resistance):
+
+  # Convert the parameter to a list of element flag indexes.
+  resistancelist = self.config.index_list(resistance, "elements")
+
+  # Then process the list.
+  for index in range(len(self.config.element_names)):
+   if index in resistancelist:
+    self.resistances.flags[index] = True
+   else:
+    self.resistances.flags[index] = False
+
+  # Update the "has_resistances" flag appropriately.
+  self.has_resistances = (len(self.resistances.flags) > 0)
+
+ # This removes an element from the monster's resistances. You can specify it as an
+ # index, as a string matching one of the element names in the config, or as a list
+ # of either of the above. If this results in the monster having no remaining
+ # resistances, it will unset the monster's "has_resistances" flag.
+ def remove_resistance(self, resistance):
+
+  # Convert the parameter to a list of element flag indexes.
+  resistancelist = self.config.index_list(resistance, "elements")
+
+  # Then process the list.
+  for index in resistancelist:
+   self.resistances.flags[index] = False
+
+  # Update the "has_resistances" flag appropriately.
+  self.has_resistances = (len(self.resistances.flags) > 0)
+
  # This gives the monster one or more additional weaknesses. You can specify it as 
  # an index, as a string matching one of the element names in the config, or as a 
  # list of either of the above. This also automatically sets the monster's
@@ -258,60 +366,6 @@ class Monster:
 
   # Update the "has_weaknesses" flag appropriately.
   self.has_weaknesses = (len(self.weaknesses.flags) > 0)
-
- # This gives the monster one or more additional resistances. You can specify it as 
- # an index, as a string matching one of the element names in the config, or as a 
- # list of either of the above. This also automatically sets the monster's
- # "has_resistances" flag.
- def add_resistance(self, resistance):
-
-  # Convert the parameter to a list of element flag indexes.
-  resistancelist = self.config.index_list(resistance, "elements")
-  
-  # Then process the list.
-  if len(resistancelist) > 0:
-   for index in resistancelist:
-    self.resistances.flags[index] = True
-
-   # Make sure we set the "has_resistances" flag.
-   self.has_resistance = True
- 
- # This sets the monster's resistances to the given list. All flags included in the
- # list will be set in the monster's resistances, and all flags not included will be
- # unset. The flags can be specified by name as per the config or by index. A single
- # string or integer will be interpreted as a list containing only that flag. If
- # this results in the monster having no resistances, its "has_resistances" flag 
- # will be unset.
- def set_resistance(self, resistance):
-
-  # Convert the parameter to a list of element flag indexes.
-  resistancelist = self.config.index_list(resistance, "elements")
-
-  # Then process the list.
-  for index in range(len(self.config.element_names)):
-   if index in resistancelist:
-    self.resistancees.flags[index] = True
-   else:
-    self.resistancees.flags[index] = False
-
-  # Update the "has_resistances" flag appropriately.
-  self.has_resistances = (len(self.resistances.flags) > 0)
-
- # This removes an element from the monster's weaknesses. You can specify it as an
- # index, as a string matching one of the element names in the config, or as a list
- # of either of the above. If this results in the monster having no remaining
- # resistances, it will unset the monster's "has_resistances" flag.
- def remove_resistance(self, resistance):
-
-  # Convert the parameter to a list of element flag indexes.
-  resistancelist = self.config.index_list(resistance, "elements")
-
-  # Then process the list.
-  for index in resistancelist:
-   self.resistances.flags[index] = False
-
-  # Update the "has_resistances" flag appropriately.
-  self.has_resistances = (len(self.resistances.flags) > 0)
 
  # This gives the monster one or more additional races. You can specify it as an
  # index, as a string matching one of the race names in the config, or as a list of
