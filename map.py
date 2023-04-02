@@ -1,3 +1,7 @@
+from trigger import EventCallTrigger
+from trigger import TeleportTrigger
+from trigger import TreasureTrigger
+
 # This refers to an entire town or dungeon floor, including its associated
 # metadata such as whether it's magnetic, whether you can use Warp or Exit,
 # what music plays, etc. It does NOT contain the layout of tiles (at least
@@ -196,6 +200,22 @@ class Map:
  
  def write_encounter_rate(self, rom, address):
   rom.data[address] = self.encounter_rate
+
+ def read_triggers(self, rom, address):
+  start = rom.read_wide(address) + rom.TRIGGER_POINTER_BONUS
+  finish = rom.read_wide(address + 2) + rom.TRIGGER_POINTER_BONUS
+  self.triggers = []
+  while start < finish:
+   match rom.data[start + 2]:
+    case 0xFF:
+     trigger = EventCallTrigger()
+    case 0xFE:
+     trigger = TreasureTrigger()
+    case _:
+     trigger = TeleportTrigger()
+   trigger.read(rom, start)
+   self.triggers.append(trigger)
+   start += 5
  
  # Returns a string representing the map information.
  def display(self, main):

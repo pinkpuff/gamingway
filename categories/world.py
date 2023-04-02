@@ -81,6 +81,10 @@ def read_maps(rom):
   # here but write them separately from the built-in "write" method so that we don't
   # have to pass it several different addresses.
   map.read_encounter_rate(rom, rom.ENCOUNTER_RATES_START + index)
+
+  # Like the encounter rates, the triggers are categorically part of the Map object,
+  # but are stored elsewhere. This passes the pointer to the map's trigger reader.
+  map.read_triggers(rom, rom.TRIGGER_POINTERS_START + index * 2)
  
  # And finally, return the list.
  return maps
@@ -302,3 +306,4 @@ def write_overworld(rom, tilemap):
   # Then terminate the row with an FF byte.
   rom.data[address] = 0xFF
   address += 1
+

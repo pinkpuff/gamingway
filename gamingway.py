@@ -118,6 +118,7 @@ class FF4Rom:
    self.map_names = world.read_map_names(self.rom, self.text)
   if datatype in ["all", "world", "maps"]:
    self.maps = world.read_maps(self.rom)
+   constants.set_map_constants(self)
   if datatype in ["all", "world", "tilemaps"]:
    self.tilemaps = world.read_tilemaps(self.rom)
   if datatype in ["all", "world", "overworld"]:

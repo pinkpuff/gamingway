@@ -40,6 +40,7 @@ class RomData:
   self.ACTOR_COMMANDS_START =     0x9FF50
   self.COMMAND_TARGETS_START =    0x9FFC3
   self.COMMAND_DELAYS_START =     0xA0089
+  self.TRIGGER_POINTERS_START =   0xA8200
   self.MAP_NAMES_START =          0xA9820
   self.MAP_DATA_START =           0xA9E84
   self.OVERWORLD_POINTERS_START = 0xB0200
@@ -82,6 +83,7 @@ class RomData:
   self.TILEMAP_UNDERMOON_BONUS = 0xC0200
   self.TOTAL_COMMANDS = 26
   self.COMMAND_NAME_WIDTH = 5
+  self.TRIGGER_POINTER_BONUS = 0xA8500
 
  # This directly injects a sequence of bytes into the romdata, starting
  # at the given address. No safety checks or any other kind of checks
