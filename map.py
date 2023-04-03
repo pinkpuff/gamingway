@@ -209,10 +209,13 @@ class Map:
    match rom.data[start + 2]:
     case 0xFF:
      trigger = EventCallTrigger()
+     trigger.type = "eventcall"
     case 0xFE:
      trigger = TreasureTrigger()
+     trigger.type = "treasure"
     case _:
      trigger = TeleportTrigger()
+     trigger.type = "teleport"
    trigger.read(rom, start)
    self.triggers.append(trigger)
    start += 5

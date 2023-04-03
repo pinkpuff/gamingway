@@ -3,6 +3,7 @@ class Trigger:
  def __init__(self):
   self.x = 0
   self.y = 0
+  self.type = ""
 
  def read(self, rom, address):
   self.x = rom.data[address]

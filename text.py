@@ -80,11 +80,6 @@ class TextInterface:
   # back into FF4 encoded text.
   self.texttoff4 = {value: key for key, value in self.ff4totext.items()}
 
- # This returns a string representation of a hex value, including one leading 0 for
- # single-digit values.
- def hex(self, number):
-  return "{:02x}".format(number).upper()
-
  # This takes a string of text in FF4 encoding and converts it to ASCII.
  def asciitext(self, ff4string):
   result = ""
@@ -142,3 +137,15 @@ class TextInterface:
   self.ff4totext.update({chr(code): symbol})
   self.texttoff4.update({symbol: chr(code)})
  
+ # This returns a string representation of a hex value, including one leading 0 for
+ # single-digit values.
+ def hex(self, number):
+  return "{:02x}".format(number).upper()
+
+ # This returns a string representation of a GP amount using the usual encoding FF4
+ # uses for monetary amounts.
+ def price(self, number):
+  result = str(number * 10)
+  if number >= 0x80:
+   result = str((number % 0x80) * 1000)
+  return result
