@@ -115,30 +115,58 @@ class TreasureTrigger(Trigger):
   # 10; if it is unset, the GP amount is the rest of the byte times 1000.
   self.contents = 0
 
+ # Read the treasure data from the rom.
  def read(self, rom, address):
+
+  # Let the parent object handle the coordinates.
   super().read(rom, address)
+
+  # Then parse the data specific to treasure triggers.
   self.formation = rom.data[address + 3] % 0x20
   self.trapped = rom.flag(address + 3, 6)
   self.has_money = not rom.flag(address + 3, 7)
   self.contents = rom.data[address + 4]
  
+ # Write the treasure data back to the rom.
  def write(self, rom, address):
+
+  # Let the parent object handle the coordinates.
   super().write(rom, address)
+
+  # Then encode the data specific to treasure triggers.
   rom.data[address + 3] = self.formation % 0x20
   rom.setbit(address + 3, 6, self.trapped)
   rom.setbit(address + 3, 7, self.has_money)
   rom.data[address + 4] = self.contents
 
+# A LauncherTrigger is something that causes a plot event to be executed when the
+# party steps on the trigger tile and the associated conditions are met. The
+# conditions are part of the launcher itself, not the trigger; the trigger just
+# specifies which launcher to look at.
 class LauncherTrigger(Trigger):
 
  def __init__(self):
+
+  # Inherit the tile coordinates and type string from the parent object.
   super().__init__()
+
+  # The index of the event launcher associated with this trigger.
   self.launcher = 0
 
+ # Read the launcher trigger data from the rom.
  def read(self, rom, address):
+
+  # Let the parent object handle the coordinates.
   super().read(rom, address)
-  self.eventcall = rom.data[address + 3]
+
+  # Then parse the data specific to launcher triggers.
+  self.launcher = rom.data[address + 3]
  
+ # Write the launcher trigger data back to the rom.
  def write(self, rom, address):
+
+  # Let the parent object handle the coordinates.
   super().write(rom, address)
+
+  # Then encode the data specific to launcher triggers.
   rom.data[address + 3] = self.launcher
