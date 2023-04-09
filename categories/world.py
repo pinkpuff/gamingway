@@ -1,5 +1,6 @@
 from tilemap import TileMap
 from map import Map
+from launcher import Launcher
 
 # Read the list of map names from the rom.
 def read_map_names(rom, text):
@@ -325,3 +326,12 @@ def write_overworld(rom, tilemap):
   rom.data[address] = 0xFF
   address += 1
 
+def read_launchers(rom):
+ launchers = []
+ for index in range(rom.TOTAL_LAUNCHERS):
+  start = rom.read_wide(rom.LAUNCHER_POINTERS_START + index * 2)
+  finish = rom.read_wide(rom.LAUNCHER_POINTERS_START + (index + 1) * 2)
+  launcher = Launcher()
+  launchers.append(launcher)
+  launcher.read(rom, start, finish)
+ return launchers

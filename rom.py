@@ -36,13 +36,15 @@ class RomData:
   self.SPELL_PROGRESSIONS_START = 0x7C900
   self.STARTING_SPELLS_START =    0x7CAC0
   self.MONSTER_VISUALS_START =    0x7CC00
+  self.LAUNCHER_POINTERS_START =  0x97460
+  self.LAUNCHER_DATA_START =      0x97660
   self.COMMAND_STATUSES_START =   0x9FF19
   self.ACTOR_COMMANDS_START =     0x9FF50
   self.COMMAND_TARGETS_START =    0x9FFC3
   self.COMMAND_DELAYS_START =     0xA0089
   self.TRIGGER_POINTERS_START =   0xA8200
   self.TRIGGER_DATA_START =       0xA8500
-  self.TRIGGER_DATA_END =         0xA9820 - 5 # Dummy value!! Remember to figure out the correct value for this later!
+  self.TRIGGER_DATA_END =         0xA9820 - 5 # Dummy value!! 
   self.MAP_NAMES_START =          0xA9820
   self.MAP_DATA_START =           0xA9E84
   self.OVERWORLD_POINTERS_START = 0xB0200
@@ -86,6 +88,7 @@ class RomData:
   self.TOTAL_COMMANDS = 26
   self.COMMAND_NAME_WIDTH = 5
   self.TRIGGER_POINTER_BONUS = 0xA8500
+  self.TOTAL_LAUNCHERS = 0xFF
 
  # This directly injects a sequence of bytes into the romdata, starting
  # at the given address. No safety checks or any other kind of checks
