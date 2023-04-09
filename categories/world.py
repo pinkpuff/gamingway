@@ -92,6 +92,9 @@ def read_maps(rom):
 # This writes the Map data back to the rom.
 def write_maps(rom, maps):
 
+ # This is for tracking where we left off in writing trigger data.
+ trigger_address = rom.TRIGGER_DATA_START
+ 
  # We simply loop through the list of Maps and write each one using the Map object's
  # "write" method.
  for index, map in enumerate(maps):
@@ -102,6 +105,21 @@ def write_maps(rom, maps):
   # here but write them separately from the built-in "write" method so that we don't
   # have to pass it several different addresses.
   map.write_encounter_rate(rom, rom.ENCOUNTER_RATES_START + index)
+
+  # Like the encounter rates, the triggers are categorically part of the Map object,
+  # but are stored elsewhere. The trigger list is a variable length record so we
+  # need to make sure there's enough room before we write anything.
+  if trigger_address + len(map.triggers) * 5 > rom.TRIGGER_DATA_END:
+   print("ERROR: Not enough room for triggers.")
+   print("** Map {}".format(index))
+  else:
+   trigger_address = map.write_triggers(rom, trigger_address)
+   
+   # The next map's trigger pointer should point to where this map's trigger data
+   # left off.
+   if index < len(maps) - 1:
+    next_pointer = rom.TRIGGER_POINTERS_START + (index + 1) * 2
+    rom.write_wide(next_pointer, trigger_address - rom.TRIGGER_DATA_START)
 
 # This reads the list of TileMaps from the rom.
 def read_tilemaps(rom):

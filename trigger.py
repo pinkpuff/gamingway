@@ -34,6 +34,10 @@ class Trigger:
  def write(self, rom, address):
   rom.data[address] = self.x
   rom.data[address + 1] = self.y
+ 
+ # Show the coordinates of the trigger.
+ def display(self, main):
+  return "({:02}, {:02})".format(self.x, self.y)
 
 # A TeleportTrigger is something that causes the party to be transported to a new
 # location. It will almost certainly be a new map and a new set of coordinates, and
@@ -70,9 +74,20 @@ class TeleportTrigger(Trigger):
   super().read(rom, address)
   
   # Then parse the data specific to teleport triggers.
+  # The second byte is the index of the destination map.
   self.map = rom.data[address + 2]
-  self.new_x = rom.data[address + 3] % 0x20
-  self.facing = rom.data[address + 3] >> 5
+  
+  # For "inner" maps, the top two bits of the third byte determine what way you 
+  # will be facing after teleporting, and the rest is the x coordinate.
+  if self.map < 0xFB:
+   self.new_x = rom.data[address + 3] % 0x20
+   self.facing = rom.data[address + 3] >> 5
+  
+  # But for "outer" maps, the entire third byte is just the x coordinate.
+  else:
+   self.new_x = rom.data[address + 3]
+  
+  # And finally, the fourth byte is the y coordinate regardless.
   self.new_y = rom.data[address + 4]
  
  # Write the teleport data back to the rom.
@@ -83,8 +98,30 @@ class TeleportTrigger(Trigger):
 
   # Then encode the data specific to the teleport triggers.
   rom.data[address + 2] = self.map
-  rom.data[address + 3] = (self.new_x % 0x20) + (self.facing << 5)
+  if self.map < 0xFB:
+   rom.data[address + 3] = (self.new_x % 0x20) + (self.facing << 5)
+  else:
+   rom.data[address + 3] = self.new_x
   rom.data[address + 4] = self.new_y
+ 
+ # Show the teleport information.
+ def display(self, main):
+  result = "{}: ".format(super().display(main))
+  result += "Teleport to ({:02}, {:02}) ".format(self.new_x, self.new_y)
+  if self.map < 0xFB:
+   result += "in Map 0x{} ".format(main.text.hex(self.map))
+   result += "facing {}".format(main.config.facings[self.facing])
+  elif self.map == 0xFB:
+   result += "in overworld"
+  elif self.map == 0xFC:
+   result += "in underworld"
+  elif self.map == 0xFD:
+   result += "in moon surface"
+  elif self.map == 0xFE:
+   result += "in current map"
+  else:
+   result += "in (unknown)"
+  return result
 
 # A TreasureTrigger is something that causes the party to receive money or an item
 # when examining it by being adjacent to the tile it's on and pressing the A button.
@@ -136,8 +173,19 @@ class TreasureTrigger(Trigger):
   # Then encode the data specific to treasure triggers.
   rom.data[address + 3] = self.formation % 0x20
   rom.setbit(address + 3, 6, self.trapped)
-  rom.setbit(address + 3, 7, self.has_money)
+  rom.setbit(address + 3, 7, not self.has_money)
   rom.data[address + 4] = self.contents
+
+ # Show the treasure information.
+ def display(self, main):
+  result = "{}: ".format(super().display(main))
+  if self.has_money:
+   result += "{} GP ".format(main.text.price(self.contents))
+  else:
+   result += "{} ".format(main.items[self.contents].name)
+  if self.trapped:
+   result += "trapped by formation 0x{}".format(main.text.hex(self.formation))
+  return result
 
 # A LauncherTrigger is something that causes a plot event to be executed when the
 # party steps on the trigger tile and the associated conditions are met. The
@@ -170,3 +218,9 @@ class LauncherTrigger(Trigger):
 
   # Then encode the data specific to launcher triggers.
   rom.data[address + 3] = self.launcher
+
+ # Show the launcher information.
+ def display(self, main):
+  result = "{}: ".format(super().display(main))
+  result += "Call event launcher {}".format(main.text.hex(self.launcher))
+  return result

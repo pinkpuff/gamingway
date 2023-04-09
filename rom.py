@@ -41,6 +41,8 @@ class RomData:
   self.COMMAND_TARGETS_START =    0x9FFC3
   self.COMMAND_DELAYS_START =     0xA0089
   self.TRIGGER_POINTERS_START =   0xA8200
+  self.TRIGGER_DATA_START =       0xA8500
+  self.TRIGGER_DATA_END =         0xA9820 - 5 # Dummy value!! Remember to figure out the correct value for this later!
   self.MAP_NAMES_START =          0xA9820
   self.MAP_DATA_START =           0xA9E84
   self.OVERWORLD_POINTERS_START = 0xB0200
@@ -75,7 +77,7 @@ class RomData:
   self.MONSTER_DATA_BONUS = 0x68200
   room = self.MONSTER_DATA_END - self.MONSTER_DATA_START
   self.MONSTER_DATA_ROOM = room
-  self.TOTAL_MAPS = 0x180
+  self.TOTAL_MAPS = 0x180 # 0x180
   self.TOTAL_MAP_NAMES = 0x79
   self.MAP_NAMES_ROOM = 1242
   self.TOTAL_OVERWORLD_TILEMAPS = 0x100

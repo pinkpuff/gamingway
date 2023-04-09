@@ -1,4 +1,4 @@
-from trigger import EventCallTrigger
+from trigger import LauncherTrigger
 from trigger import TeleportTrigger
 from trigger import TreasureTrigger
 
@@ -208,8 +208,8 @@ class Map:
   while start < finish:
    match rom.data[start + 2]:
     case 0xFF:
-     trigger = EventCallTrigger()
-     trigger.type = "eventcall"
+     trigger = LauncherTrigger()
+     trigger.type = "launcher"
     case 0xFE:
      trigger = TreasureTrigger()
      trigger.type = "treasure"
@@ -219,6 +219,18 @@ class Map:
    trigger.read(rom, start)
    self.triggers.append(trigger)
    start += 5
+ 
+ def write_triggers(self, rom, address):
+  
+  # Unlike the previous function where the address you're passing is
+  # the address to the pointer, this function expects to be passed the
+  # address at which to write the actual trigger DATA itself. It will
+  # then return the address where it "left off" so the outer function
+  # can update the pointer table.
+  for trigger in self.triggers:
+   trigger.write(rom, address)
+   address += 5
+  return address
  
  # Returns a string representing the map information.
  def display(self, main):

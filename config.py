@@ -177,6 +177,13 @@ class Configuration:
    "25%",
    "100%"
   ]
+  
+  self.facings = [
+   "up",
+   "right",
+   "down",
+   "left"
+  ]
 
   self.attribute_names = self.element_names 
   self.attribute_names += self.persistent_status_names
