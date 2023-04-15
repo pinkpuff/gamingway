@@ -58,6 +58,7 @@ class FF4Rom:
   self.characters = []
   self.actors = []
   self.maps = []
+  self.launchers = []
   
  # Export the raw bytes to a file.
  # This won't automatically convert the abstract game objects into bytecode; that 
@@ -123,6 +124,8 @@ class FF4Rom:
    self.tilemaps = world.read_tilemaps(self.rom)
   if datatype in ["all", "world", "overworld"]:
    self.overworld = world.read_overworld(self.rom)
+  if datatype in ["all", "world", "launchers"]:
+   self.launchers = world.read_launchers(self.rom)
  
  # Writes all the data of the specified type from the abstract game objects and 
  # converts it into the raw bytes. If no type is specified, it defaults to writing 
@@ -163,6 +166,8 @@ class FF4Rom:
    world.write_tilemaps(self.rom, self.tilemaps)
   if datatype in ["all", "world", "overworld"]:
    world.write_overworld(self.rom, self.overworld)
+  if datatype in ["all", "world", "launchers"]:
+   world.write_launchers(self.com, self.launchers)
  
  def display(self, entity):
   result = ""

@@ -326,12 +326,59 @@ def write_overworld(rom, tilemap):
   rom.data[address] = 0xFF
   address += 1
 
+# This reads the list of event launchers from the rom.
 def read_launchers(rom):
  launchers = []
+
+ # Launchers are a variable length record with a pointer table. However, each
+ # launcher doesn't seem to have a terminator like an 0xFF or 0x00 byte or anything,
+ # so I'm not exactly sure how the game itself knows "where to stop" when it's
+ # reading launchers. For now I'm just using the FF4kster strategy of reading the
+ # next launcher's pointer and assuming that where the next launcher begins is
+ # where this launcher ends.
  for index in range(rom.TOTAL_LAUNCHERS):
   start = rom.read_wide(rom.LAUNCHER_POINTERS_START + index * 2)
+  start += rom.LAUNCHER_DATA_START
   finish = rom.read_wide(rom.LAUNCHER_POINTERS_START + (index + 1) * 2)
+  finish += rom.LAUNCHER_DATA_START
   launcher = Launcher()
   launchers.append(launcher)
   launcher.read(rom, start, finish)
  return launchers
+
+# This writes the list of event launchers back to the rom.
+def write_launchers(rom, launchers):
+
+ # Since the list of launchers is variable length, we need to first determine if
+ # there is enough room for all the launcher data.
+ needed = 0
+ for launcher in launchers:
+  needed += launcher.length()
+ 
+ # Then if there isn't enough room, we don't write anything and produce an error.
+ if needed > available:
+  print("ERROR: Not enough room for event launchers.")
+ 
+ # Otherwise, we proceed.
+ else:
+  
+  # Loop through the list, writing each one and updating the pointers as we go.
+  address = rom.LAUNCHER_DATA_START
+  for index, launcher in enumerate(launchers):
+
+   # First create the pointer.
+   pointer = address - rom.LAUNCHER_DATA_START
+   rom.write_wide(rom.LAUNCHER_POINTERS_START, pointer)
+
+   # Then write the launcher data.
+   # Since launchers are a variable length record, the writing routine returns the
+   # address it left off at so that we can accurately track where we are.
+   address = launcher.write(rom, address)
+
+  # Finally, add the final pointer to the address where the last launcher left off.
+  # This has to do with the way we're reading them, using the pointer to the next
+  # launcher to determine the ending of the current one. Thus we only read 0xFF
+  # launchers despite there being 0x100 pointers, since we need an "ending" pointer
+  # for the last launcher in order for this to work.
+  pointer = address - rom.LAUNCHER_DATA_START
+  rom.write_wide(rom.LAUNCHER_POINTERS_START, pointer)

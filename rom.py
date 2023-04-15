@@ -38,13 +38,14 @@ class RomData:
   self.MONSTER_VISUALS_START =    0x7CC00
   self.LAUNCHER_POINTERS_START =  0x97460
   self.LAUNCHER_DATA_START =      0x97660
+  self.LAUNCHER_DATA_END =        0x9FF00 # Placeholder value!!
   self.COMMAND_STATUSES_START =   0x9FF19
   self.ACTOR_COMMANDS_START =     0x9FF50
   self.COMMAND_TARGETS_START =    0x9FFC3
   self.COMMAND_DELAYS_START =     0xA0089
   self.TRIGGER_POINTERS_START =   0xA8200
   self.TRIGGER_DATA_START =       0xA8500
-  self.TRIGGER_DATA_END =         0xA9820 - 5 # Dummy value!! 
+  self.TRIGGER_DATA_END =         0xA9820 - 5 # Placeholder value!! 
   self.MAP_NAMES_START =          0xA9820
   self.MAP_DATA_START =           0xA9E84
   self.OVERWORLD_POINTERS_START = 0xB0200
