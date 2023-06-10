@@ -166,8 +166,9 @@ class FF4Rom:
    world.write_tilemaps(self.rom, self.tilemaps)
   if datatype in ["all", "world", "overworld"]:
    world.write_overworld(self.rom, self.overworld)
-  if datatype in ["all", "world", "launchers"]:
-   world.write_launchers(self.com, self.launchers)
+  # if datatype in ["all", "world", "launchers"]:
+   # world.write_launchers(self.rom, self.launchers)
+   # There's some kind of bug going on in the launcher writing
  
  def display(self, entity):
   result = ""

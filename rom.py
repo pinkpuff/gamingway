@@ -90,6 +90,8 @@ class RomData:
   self.COMMAND_NAME_WIDTH = 5
   self.TRIGGER_POINTER_BONUS = 0xA8500
   self.TOTAL_LAUNCHERS = 0xFF
+  room = self.LAUNCHER_DATA_END - self.LAUNCHER_DATA_START
+  self.LAUNCHER_ROOM = room
 
  # This directly injects a sequence of bytes into the romdata, starting
  # at the given address. No safety checks or any other kind of checks

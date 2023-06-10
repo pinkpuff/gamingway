@@ -356,7 +356,7 @@ def write_launchers(rom, launchers):
   needed += launcher.length()
  
  # Then if there isn't enough room, we don't write anything and produce an error.
- if needed > available:
+ if needed > rom.LAUNCHER_ROOM:
   print("ERROR: Not enough room for event launchers.")
  
  # Otherwise, we proceed.
