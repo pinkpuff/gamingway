@@ -82,11 +82,11 @@ class Launcher:
    # true conditions first followed by all the false conditions, so until I have
    # tested it more thoroughly, this is what I will default to doing here as well.
    for condition in component.conditions:
-    if condition.setting:
+    if not condition.setting:
      result.append(0xFE)
      result.append(condition.flag)
    for condition in component.conditions:
-    if not condition.setting:
+    if condition.setting:
      result.append(condition.flag)
    result.append(0xFF)
    result.append(component.event)
