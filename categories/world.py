@@ -112,7 +112,7 @@ def write_maps(rom, maps):
   # need to make sure there's enough room before we write anything.
   if trigger_address + len(map.triggers) * 5 > rom.TRIGGER_DATA_END:
    print("ERROR: Not enough room for triggers.")
-   print("** Map {}".format(index))
+   print("** Map {} / {}".format(index, len(maps)))
   else:
    trigger_address = map.write_triggers(rom, trigger_address)
    
@@ -368,7 +368,7 @@ def write_launchers(rom, launchers):
 
    # First create the pointer.
    pointer = address - rom.LAUNCHER_DATA_START
-   rom.write_wide(rom.LAUNCHER_POINTERS_START, pointer)
+   rom.write_wide(rom.LAUNCHER_POINTERS_START + index * 2, pointer)
 
    # Then write the launcher data.
    # Since launchers are a variable length record, the writing routine returns the
@@ -381,4 +381,4 @@ def write_launchers(rom, launchers):
   # launchers despite there being 0x100 pointers, since we need an "ending" pointer
   # for the last launcher in order for this to work.
   pointer = address - rom.LAUNCHER_DATA_START
-  rom.write_wide(rom.LAUNCHER_POINTERS_START, pointer)
+  rom.write_wide(rom.LAUNCHER_POINTERS_START + len(launchers) * 2, pointer)

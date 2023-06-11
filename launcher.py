@@ -66,7 +66,7 @@ class Launcher:
      offset += 1
      component.conditions.append(EventCondition(rom.data[start + offset], False))
 
-    # Any other byte indicates a condition that has to be true for the even to be
+    # Any other byte indicates a condition that has to be true for the event to be
     # launched.
     case _:
      component.conditions.append(EventCondition(rom.data[start + offset], True))

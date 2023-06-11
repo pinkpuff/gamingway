@@ -45,7 +45,7 @@ class RomData:
   self.COMMAND_DELAYS_START =     0xA0089
   self.TRIGGER_POINTERS_START =   0xA8200
   self.TRIGGER_DATA_START =       0xA8500
-  self.TRIGGER_DATA_END =         0xA9820 - 5 # Placeholder value!! 
+  self.TRIGGER_DATA_END =         0xA9820
   self.MAP_NAMES_START =          0xA9820
   self.MAP_DATA_START =           0xA9E84
   self.OVERWORLD_POINTERS_START = 0xB0200
