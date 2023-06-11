@@ -167,8 +167,8 @@ class FF4Rom:
   if datatype in ["all", "world", "overworld"]:
    world.write_overworld(self.rom, self.overworld)
   if datatype in ["all", "world", "launchers"]:
+   # Causes a slight data misalignment, even with no changes.
    world.write_launchers(self.rom, self.launchers)
-   # There's some kind of bug going on in the launcher writing
  
  def display(self, entity):
   result = ""
