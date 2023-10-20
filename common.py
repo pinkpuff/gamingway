@@ -116,7 +116,7 @@ class AttributeTable(FlagSet):
   return result
  
  def display_alternate(self, main):
-  return self.display(True)
+  return self.display(main, True)
  
  def display_inverted(self, main, alt_statuses = False):
   newflags = []
