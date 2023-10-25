@@ -102,7 +102,7 @@ class RomData:
    self.data[address + index] = byte
 
  # This returns a boolean value based on whether the given bit of the
- # given byte is set or not.
+ # byte at the given address is set or not.
  def flag(self, address, bit):
   return True if (self.data[address] >> bit) & 1 else False
 
