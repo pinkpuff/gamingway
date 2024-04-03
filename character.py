@@ -142,10 +142,10 @@ class Character:
   # For levelups as far as level 69, we simply create a new LevelUp object and let
   # its "read" function do the heavy lifting.
   self.levelups = []
-  for index in range(70):
+  for index in range(71):
    levelup = LevelUp()
    self.levelups.append(levelup)
-   if index > self.level:
+   if index >= self.level:
     levelup.read(rom, pointer + (index - self.level) * 5)
 
   # Levelups after level 70 don't get their own HP, MP, or TNL; they use the
@@ -162,23 +162,44 @@ class Character:
    levelup.statbonus.read(rom, pointer + offset)
  
  # Write the character's levelup data back to the rom.
- def write_levelups(self, rom, address):
+ def write_levelups(self, rom, address, bonus):
+
+  # This tracks whether we've passed the end of the levelup table.
+  valid = (bonus < rom.LEVELUP_TABLE_END)
   
-  # Just like when we read them, we have to do the reverse to compute the pointer
-  # to write based on the character's starting level.
-  pointer = rom.LEVELUP_TABLE_BONUS + (self.level - 1) * 5
-  pointer += rom.data[address] + rom.data[address + 1] * 0x100
-  
-  # Then we once again defer to the LevelUp object to write itself to the computed
-  # address.
-  for index in range(self.level, 70):
-   offset = (index - self.level) * 5
-   self.levelups[index].write(rom, pointer + offset)
-  
-  # And likewise for the "after level 70" data.
-  for index, levelup in enumerate(self.after70):
-   offset = (70 - self.level) * 5 + index
-   levelup.statbonus.write(rom, pointer + offset)
+  if valid:
+
+   # The parent function tracks where we left off writing the levelup tables
+   # in the "bonus" parameter, so this is returned at the end.
+   # From this, we compute the pointer to write based on the starting level.
+   # But otherwise, the data is just written contiguously.
+   pointer = bonus - rom.LEVELUP_TABLE_BONUS - (self.level - 1) * 5
+   # print("{:X} = {:X}".format(rom.data[address] + rom.data[address + 1] * 0x100, pointer))
+   rom.data[address] = pointer % 0x100
+   rom.data[address + 1] = pointer >> 8
+      
+   # Then we once again defer to the LevelUp object to write itself to the computed
+   # address.
+   for index in range(self.level, 70):
+    if valid:
+     if bonus >= rom.LEVELUP_TABLE_END:
+      print("Bleed past end of levelup data. Writing halted.")
+      vaild = False
+     else:
+      self.levelups[index].write(rom, bonus)
+      bonus += 5
+   
+   # And likewise for the "after level 70" data.
+   for index, levelup in enumerate(self.after70):
+    if valid:
+     if bonus >= rom.LEVELUP_TABLE_END:
+      print("Bleed past end of levelup data. Writing halted.")
+      vaild = False
+     else:
+      levelup.statbonus.write(rom, bonus)
+      bonus += 1
+   
+  return bonus
 
  # Returns a string containing this character's information.
  def display(self, main):

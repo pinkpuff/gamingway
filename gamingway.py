@@ -131,7 +131,7 @@ class FF4Rom:
  # converts it into the raw bytes. If no type is specified, it defaults to writing 
  # ALL game data. If you wish to write multiple types of data without writing all of
  # them, call this method multiple times with different arguments.
- def write(self, datatype = "all"):
+ def write(self, datatype = "all", include_triggers = True):
 
   # Writing certain types of data can cause a slight misalignment in the data, the 
   # pointers, or both, even if you change nothing. I'm not completely sure why this 
@@ -150,6 +150,7 @@ class FF4Rom:
   if datatype in ["all", "gear", "items"]:
    gear.write_items(self.rom, self.text, self.items)
   if datatype in ["all", "party", "characters"]:
+   # Something is causing the TNL values to be messed up
    party.write_characters(self.rom, self.characters)
   if datatype in ["all", "party", "actors"]:
    party.write_actors(self.rom, self.actors)
@@ -161,14 +162,14 @@ class FF4Rom:
   if datatype in ["all", "world", "mapnames"]:
    world.write_map_names(self.rom, self.text, self.map_names)
   if datatype in ["all", "world", "maps"]:
-   world.write_maps(self.rom, self.maps)
+   world.write_maps(self.rom, self.maps, include_triggers)
   if datatype in ["all", "world", "tilemaps"]:
    world.write_tilemaps(self.rom, self.tilemaps)
   if datatype in ["all", "world", "overworld"]:
    world.write_overworld(self.rom, self.overworld)
-  if datatype in ["all", "world", "launchers"]:
+  # if datatype in ["all", "world", "launchers"]:
    # Causes a slight data misalignment, even with no changes.
-   world.write_launchers(self.rom, self.launchers)
+   # world.write_launchers(self.rom, self.launchers)
  
  def display(self, entity):
   result = ""

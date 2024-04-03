@@ -161,7 +161,7 @@ class Weapon(Equipment):
   if len(main.spells) > self.casts_spell:
    casts = main.spells[self.casts_spell].name
   else:
-   casts = text.hex(self.casts_spell)
+   casts = main.text.hex(self.casts_spell)
   result += "Casts:      {}\n".format(casts)
   attributes = "[{}] ".format(main.text.hex(self.attributes))
   if len(main.attributes) > 0:
