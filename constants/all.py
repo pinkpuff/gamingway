@@ -1,6 +1,7 @@
 import constants.spells as spells
 import constants.spellbooks as spellbooks
 import constants.items as items
+import constants.jobs as jobs
 import constants.characters as characters
 import constants.actors as actors
 import constants.commands as commands
@@ -38,6 +39,9 @@ def set_spellbook_constants(main):
 
 def set_item_constants(main):
  items.set_constants(main)
+
+def set_job_constants(main):
+ jobs.set_constants(main)
 
 def set_character_constants(main):
  characters.set_constants(main)

@@ -1,6 +1,16 @@
+from job import Job
 from character import Character
 from actor import Actor
 from command import Command
+
+# Read all the jobs from the rom.
+def read_jobs(rom, text):
+ jobs = []
+ for index in range(rom.TOTAL_JOBS):
+  job = Job()
+  jobs.append(job)
+  job.read_name(rom, rom.JOB_NAMES_START + index * rom.JOB_NAME_WIDTH, text)
+ return jobs
 
 # Read all the characters from the rom.
 def read_characters(rom):

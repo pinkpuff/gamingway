@@ -76,24 +76,24 @@ class Configuration:
    "Hidden"
   ]
 
-  self.job_names = [
-   "Dark Knight",
-   "Dragoon",
-   "Caller",
-   "Sage",
-   "Bard",
-   "White Wizard",
-   "Karate",
-   "Black Mage",
-   "White Mage",
-   "Paladin",
-   "Chief",
-   "Summoner",
-   "Ninja",
-   "Lunar",
-   "Brother",
-   "Fiancee"
-  ]
+  # self.job_names = [
+   # "Dark Knight",
+   # "Dragoon",
+   # "Caller",
+   # "Sage",
+   # "Bard",
+   # "White Wizard",
+   # "Karate",
+   # "Black Mage",
+   # "White Mage",
+   # "Paladin",
+   # "Chief",
+   # "Summoner",
+   # "Ninja",
+   # "Lunar",
+   # "Brother",
+   # "Fiancee"
+  # ]
 
   self.equip_slots = [
    "Hand", 
@@ -184,6 +184,115 @@ class Configuration:
    "down",
    "left"
   ]
+  
+  self.placement_movements = [
+   "moves up",
+   "moves right",
+   "moves down",
+   "moves left",
+   "faces up",
+   "faces right",
+   "faces down",
+   "faces left",
+   "becomes (in)visible",
+   "leaps over",
+   "spins",
+   "hops",
+   "waves in",
+   "waves out",
+   "bows head",
+   "lies down"
+  ]
+  
+  self.self_movements = [
+   "move up",
+   "move right",
+   "move down",
+   "move left",
+   "face up",
+   "face right",
+   "face down",
+   "face left",
+   "become invisible",
+   "become visible",
+   "wave in",
+   "wave out",
+   "bow head",
+   "lie down",
+   "start/stop turning",
+   "start/stop spinning"
+  ]
+
+  self.instruction_names = []
+  for index in range(0xC0):
+   instruction = "Placement {} ".format(int(index / 0x10))
+   instruction += self.placement_movements[index % 0x10]
+   self.instruction_names.append(instruction)
+  for index in range(0xC0, 0xD0):
+   instruction = "You " + self.self_movements[index % 0x10]
+   self.instruction_names.append(instruction)
+  self.instruction_names += [
+   "Start/stop shaking",
+   "Flash screen",
+   "Blur screen",
+   "Space travel",
+   "Fat chocobo",
+   "Open next door",
+   "Jolt screen",
+   "Start/stop running",
+   "Fade out",
+   "Namingway",
+   "Screen fade",
+   "Toggle status: ",
+   "Pay GP: ",
+   "Change leader: ",
+   "Heal HP: ",
+   "Heal MP: ",
+   "Get item: ",
+   "Lose item: ",
+   "Learn spell: ",
+   "Remove status: ",
+   "Add status: ",
+   "Get GP: ",
+   "Lose GP: ",
+   "Hire actor: ",
+   "Lose actor: ",
+   "Pause: ",
+   "Fade in: ",
+   "Repeat: ",
+   "Battle: ",
+   "Shop: ",
+   "Message parameter: ",
+   "Local message: ",
+   "Bank 1 (lo) message: ",
+   "Bank 1 (hi) message: ",
+   "Set flag: ",
+   "Clear flag: ",
+   "Activate NPC: ",
+   "Deactivate NPC: ",
+   "Bank 3 message: ",
+   "Select item: ",
+   "Choose Yes/No",
+   "Tint screen: ",
+   "Play song: ",
+   "Play SFX: ",
+   "Conditional: ",
+   "Play VFX: ",
+   "Teleport: ",
+   "END EVENT"
+  ]
+  
+  self.parameter_count = {}
+  for index in range(0x100):
+   if index <= 0xDA:
+    self.parameter_count[index] = 0
+   else:
+    self.parameter_count[index] = 1
+  self.parameter_count[0xFF] = 0
+  self.parameter_count[0xE2] = 2
+  self.parameter_count[0xEB] = 2
+  self.parameter_count[0xFC] = 2
+  self.parameter_count[0xFE] = 4
 
   self.attribute_names = self.element_names 
   self.attribute_names += self.persistent_status_names

@@ -27,6 +27,7 @@ class RomData:
   self.WEAPON_VISUALS_START =     0x7A010
   self.SPELL_VISUALS_START =      0x7A24C
   self.SPELL_SOUNDS_START =       0x7A54F
+  self.JOB_NAMES_START =          0x7A964
   self.EQUIP_TABLES_START =       0x7A750
   self.ATTRIBUTE_TABLES_START =   0x7A790
   self.COMMAND_NAMES_START =      0x7A9C6
@@ -38,6 +39,7 @@ class RomData:
   self.SPELL_PROGRESSIONS_START = 0x7C900
   self.STARTING_SPELLS_START =    0x7CAC0
   self.MONSTER_VISUALS_START =    0x7CC00
+  self.EVENT_POINTERS_START =     0x90200
   self.LAUNCHER_POINTERS_START =  0x97460
   self.LAUNCHER_DATA_START =      0x97660
   self.LAUNCHER_DATA_END =        0x9FF00 # Placeholder value!!
@@ -65,6 +67,7 @@ class RomData:
   room = self.STARTING_SPELLS_START - self.SPELL_PROGRESSIONS_START
   self.SPELL_PROGRESSIONS_ROOM = room
   self.TOTAL_EQUIP_TABLES = 32
+  self.JOB_NAME_WIDTH = 7
   self.ITEM_NAME_WIDTH = 9
   self.TOTAL_ITEMS = 0x100
   self.ARMORS_START_INDEX = 0x60
@@ -74,6 +77,7 @@ class RomData:
   self.TOTAL_ARMORS = 0x50
   self.TOTAL_SUPPLIES = 0x2E
   self.TOTAL_TOOLS = 0x22
+  self.TOTAL_JOBS = 14
   self.TOTAL_CHARACTERS = 13
   self.TOTAL_ACTORS = 20
   self.LEVELUP_TABLE_BONUS = 0x70200
@@ -94,6 +98,8 @@ class RomData:
   self.TOTAL_LAUNCHERS = 0xFF
   room = self.LAUNCHER_DATA_END - self.LAUNCHER_DATA_START
   self.LAUNCHER_ROOM = room
+  self.TOTAL_EVENTS = 0x100
+  self.EVENT_POINTER_BONUS = 0x90400
 
  # This directly injects a sequence of bytes into the romdata, starting
  # at the given address. No safety checks or any other kind of checks

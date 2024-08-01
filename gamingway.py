@@ -8,6 +8,7 @@ import categories.gear as gear
 import categories.party as party
 import categories.combat as combat
 import categories.world as world
+import categories.story as story
 
 class FF4Rom:
 
@@ -103,6 +104,9 @@ class FF4Rom:
   if datatype in ["all", "gear", "items"]:
    self.items = gear.read_items(self.rom, self.text)
    constants.set_item_constants(self)
+  if datatype in ["all", "party", "jobs"]:
+   self.jobs = party.read_jobs(self.rom, self.text)
+   constants.set_job_constants(self)
   if datatype in ["all", "party", "characters"]:
    self.characters = party.read_characters(self.rom)
    constants.set_character_constants(self)
@@ -126,6 +130,8 @@ class FF4Rom:
    self.overworld = world.read_overworld(self.rom)
   if datatype in ["all", "world", "launchers"]:
    self.launchers = world.read_launchers(self.rom)
+  if datatype in ["all", "story", "events"]:
+   self.events = story.read_events(self.rom, self.config)
  
  # Writes all the data of the specified type from the abstract game objects and 
  # converts it into the raw bytes. If no type is specified, it defaults to writing 
