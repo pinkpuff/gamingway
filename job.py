@@ -20,9 +20,16 @@ class Job:
  # Read the Job from the given address.
  def read(self, rom, address):
   pass
+
+ # Read the main job information.
+ def read(self, rom, address):
+  self.white = rom.data[address]
+  self.black = rom.data[address + 1]
+  self.summon = rom.data[address + 2]
+
  
- # Read the spell name from the given address.
- # The spell names are stored separately from the rest of the spell data, so we use
+ # Read the job name from the given address.
+ # The job names are stored separately from the rest of the job data, so we use
  # a separate reading function so that we don't get confused passing a bunch of
  # different addresses to one function.
  def read_name(self, rom, address, text):
