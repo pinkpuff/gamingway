@@ -10,7 +10,16 @@ def read_jobs(rom, text):
   job = Job()
   jobs.append(job)
   job.read_name(rom, rom.JOB_NAMES_START + index * rom.JOB_NAME_WIDTH, text)
+  job.read(rom, rom.JOB_DATA_START + index * 3)
+  job.read(rom, rom.JOB_MENU_DATA_START + index * 3)
  return jobs
+
+# Write all the jobs back to the rom.
+def write_jobs(rom, text, jobs):
+ for index, job in enumerate(jobs):
+  job.write_name(rom, rom.JOB_NAMES_START + index * rom.JOB_NAME_WIDTH, text)
+  job.write(rom, rom.JOB_DATA_START + index * 3)
+  job.write_menu(rom, rom.JOB_MENU_DATA_START + index * 3)
 
 # Read all the characters from the rom.
 def read_characters(rom):

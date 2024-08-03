@@ -155,6 +155,8 @@ class FF4Rom:
    gear.write_equips(self.rom, self.equips)
   if datatype in ["all", "gear", "items"]:
    gear.write_items(self.rom, self.text, self.items)
+  if datatype in ["all", "party", "jobs"]:
+   party.write_jobs(self.rom, self.text, self.jobs)
   if datatype in ["all", "party", "characters"]:
    # Something is causing the TNL values to be messed up
    party.write_characters(self.rom, self.characters)
