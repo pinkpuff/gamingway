@@ -11,7 +11,7 @@ def read_jobs(rom, text):
   jobs.append(job)
   job.read_name(rom, rom.JOB_NAMES_START + index * rom.JOB_NAME_WIDTH, text)
   job.read(rom, rom.JOB_DATA_START + index * 3)
-  job.read(rom, rom.JOB_MENU_DATA_START + index * 3)
+  job.read_menu(rom, rom.JOB_MENU_DATA_START + index * 3)
  return jobs
 
 # Write all the jobs back to the rom.
